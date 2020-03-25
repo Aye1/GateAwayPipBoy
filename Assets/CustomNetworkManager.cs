@@ -6,12 +6,17 @@ using Mirror;
 public class CustomNetworkManager : NetworkManager
 {
     public delegate void ClientConnectedToServer(NetworkConnection conn);
-    public ClientConnectedToServer OnClientConnectedToServer;
+    public static ClientConnectedToServer OnClientConnectedToServer;
 
     public delegate void ClientDisconnectedFromServer(NetworkConnection conn);
-    public ClientDisconnectedFromServer OnClientDisconnectedFromServer;
+    public static ClientDisconnectedFromServer OnClientDisconnectedFromServer;
+
+    public delegate void PlayerAddedToServer(NetworkConnection conn, Player newPlayer);
+    public static PlayerAddedToServer OnPlayerAddedToServer;
 
     public static CustomNetworkManager Instance { get; private set; }
+
+    public List<Player> ConnectedPlayers { get; private set; }
 
     public override void Awake()
     {
@@ -20,6 +25,7 @@ public class CustomNetworkManager : NetworkManager
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            ConnectedPlayers = new List<Player>();
         }
         else
         {
@@ -37,5 +43,15 @@ public class CustomNetworkManager : NetworkManager
     {
         base.OnServerDisconnect(conn);
         OnClientDisconnectedFromServer?.Invoke(conn);
+    }
+
+    public override void OnServerAddPlayer(NetworkConnection conn)
+    {
+        Debug.Log("Player added");
+        GameObject createdPlayer = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+        Player player = createdPlayer.GetComponent<Player>();
+        ConnectedPlayers.Add(player);
+        NetworkServer.AddPlayerForConnection(conn, createdPlayer);
+        OnPlayerAddedToServer?.Invoke(conn, player);
     }
 }

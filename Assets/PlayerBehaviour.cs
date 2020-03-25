@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-public class GameMasterBehaviour : NetworkBehaviour
+public class PlayerBehaviour : NetworkBehaviour
 {
-
     // Start is called before the first frame update
     void Start()
     {
-        gameObject.SetActive(netIdentity.isServer);
+        gameObject.SetActive(netIdentity.isClient);
         Init();
     }
 
