@@ -16,7 +16,6 @@ public class PlayerInfoPanel : MonoBehaviour
     {
         _nameInputField.text = player.debugInfo;
         _nameInputField.onEndEdit.AddListener(OnInputFieldEndEdit);
-        _nameInputField.onValueChanged.AddListener(OnInputFieldEndEdit);
     }
 
     private void OnInputFieldEndEdit(string text)

@@ -1,9 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Mirror;
 
-public class DummyBehaviour : NetworkBehaviour
+public class GameView : MonoBehaviour
 {
-
+    public GameData gameData;
 }

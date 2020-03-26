@@ -6,7 +6,9 @@ using System.Linq;
 
 public class DevicesMonitor : GameMasterBehaviour
 {
+#pragma warning disable 0649
     [SerializeField] private DeviceView _deviceTemplate;
+#pragma warning restore 0649
 
     public static DevicesMonitor Instance { get; private set; }
 

@@ -10,15 +10,13 @@ using Mirror;
  * The GameData is a NetworkBehaviour object
  * It is controlled by the server, not the client
  */
-public class GameView : MonoBehaviour
+public class TestGameView : GameView
 {
 #pragma warning disable 0649
     [SerializeField] private Button _startButton;
     [SerializeField] private Button _winButton;
     [SerializeField] private Button _restartButton;
 #pragma warning restore 0649
-
-    public GameData gameData;
 
     // Start is called before the first frame update
     public void Start()

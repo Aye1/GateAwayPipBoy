@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class PlayerInfoManager : MonoBehaviour
 {
-
+#pragma warning disable 0649
     [SerializeField] private PlayerInfoPanel _infoPanel;
+#pragma warning restore 0649
 
     public static PlayerInfoManager Instance { get; private set; }
 
@@ -25,6 +26,7 @@ public class PlayerInfoManager : MonoBehaviour
     public void CreatePlayerInfo(Player player)
     {
         PlayerInfoPanel createdPanel = Instantiate(_infoPanel, Vector3.zero, Quaternion.identity, transform);
+        createdPanel.transform.localPosition = Vector3.zero;
         createdPanel.player = player;
     }
 }
