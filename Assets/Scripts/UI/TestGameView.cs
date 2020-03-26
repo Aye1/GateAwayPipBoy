@@ -16,6 +16,7 @@ public class TestGameView : GameView
     [SerializeField] private Button _startButton;
     [SerializeField] private Button _winButton;
     [SerializeField] private Button _restartButton;
+    [SerializeField] private Button _closeButton;
 #pragma warning restore 0649
 
     // Start is called before the first frame update
@@ -24,6 +25,7 @@ public class TestGameView : GameView
         _startButton.onClick.AddListener(StartGame);
         _winButton.onClick.AddListener(WinGame);
         _restartButton.onClick.AddListener(ResetGame);
+        _closeButton.onClick.AddListener(ExitGame);
     }
 
     // Update is called once per frame
@@ -56,5 +58,10 @@ public class TestGameView : GameView
     public void ResetGame()
     {
        gameData.CmdSetStatus(GameStatus.NotStarted);
+    }
+
+    public void ExitGame()
+    {
+        gameData.CmdExit();
     }
 }

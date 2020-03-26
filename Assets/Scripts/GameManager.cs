@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
         foreach(Player player in CustomNetworkManager.Instance.ConnectedPlayers)
         {
             GameData createdGame = Instantiate(gameDataTemplate);
-            _currentGames.Add(createdGame);
+            createdGame.CmdAddPlayer(player.netIdentity);
             SendGame(createdGame, player);
         }
     }

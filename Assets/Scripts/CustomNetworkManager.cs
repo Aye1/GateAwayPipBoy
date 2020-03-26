@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using System.Linq;
 
 public class CustomNetworkManager : NetworkManager
 {
@@ -54,5 +55,15 @@ public class CustomNetworkManager : NetworkManager
         ConnectedPlayers.Add(player);
         NetworkServer.AddPlayerForConnection(conn, createdPlayer);
         OnPlayerAddedToServer?.Invoke(player);
+    }
+
+    public Player GetPlayer(NetworkConnection connection)
+    {
+        return ConnectedPlayers.First(x => x.Connection == connection);
+    }
+
+    public Player GetPlayer(NetworkIdentity identity)
+    {
+        return ConnectedPlayers.First(x => x.netIdentity == identity);
     }
 }

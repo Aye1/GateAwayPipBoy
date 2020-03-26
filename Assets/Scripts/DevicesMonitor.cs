@@ -19,7 +19,6 @@ public class DevicesMonitor : GameMasterBehaviour
         if(Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -53,11 +52,34 @@ public class DevicesMonitor : GameMasterBehaviour
 
     public void SetCurrentGame(Player player, GameData gameData)
     {
-        DeviceView currentDevice = ConnectedDevices.First(x => x.player == player);
+        DeviceView currentDevice = GetDeviceForPlayer(player);
         if(currentDevice != null)
         {
             currentDevice.SetCurrentGame(gameData);
+            gameData.OnGameExit += ExitGame;
         }
+    }
+
+    public void ExitGame(GameData game)
+    {
+        foreach(NetworkIdentity player in game.playerIdentities)
+        {
+            DeviceView associatedView = GetDeviceForPlayer(player);
+            if (associatedView != null)
+            {
+                associatedView.SetCurrentGame(null);
+            }
+        }
+    }
+
+    private DeviceView GetDeviceForPlayer(Player player)
+    {
+        return ConnectedDevices.First(x => x.player == player);
+    }
+
+    private DeviceView GetDeviceForPlayer(NetworkIdentity playerIdentity)
+    {
+        return ConnectedDevices.First(x => x.player.netIdentity == playerIdentity);
     }
 
 }

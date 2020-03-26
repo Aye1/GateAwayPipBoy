@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using System;
 
+[Serializable]
 public class Player : NetworkBehaviour
 {
     public NetworkConnection Connection { get; set; }

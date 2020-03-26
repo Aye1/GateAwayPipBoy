@@ -12,6 +12,17 @@ public class GameData : NetworkBehaviour
     [SyncVar]
     public string gameName;
 
+    public class SyncNIList : SyncList<NetworkIdentity> { }
+    public SyncNIList playerIdentities;
+
+    public delegate void GameExit(GameData data);
+    public GameExit OnGameExit;
+
+    public void Start()
+    {
+        playerIdentities = new SyncNIList();
+    }
+
     public override void OnStartClient()
     {
         base.OnStartClient();
@@ -28,5 +39,26 @@ public class GameData : NetworkBehaviour
     public void CmdSetStatus(GameStatus status)
     {
         this.status = status;
+    }
+
+    [Command]
+    public void CmdExit()
+    {
+        OnGameExit?.Invoke(this);
+    }
+
+    [Command]
+    public void CmdAddPlayer(NetworkIdentity playerIdentity)
+    {
+        if(!playerIdentities.Contains(playerIdentity))
+        {
+            playerIdentities.Add(playerIdentity);
+        }
+    }
+
+    [Command]
+    public void CmdRemovePlayer(NetworkIdentity playerIdentity)
+    {
+        playerIdentities.Remove(playerIdentity);
     }
 }
