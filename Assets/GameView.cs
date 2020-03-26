@@ -2,13 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Mirror;
 
-public class FakeGame : MonoBehaviour
+/* This is a View (+ Controller maybe) class
+ * There should not be any reference to Mirror or network here
+ * All data should be controlled by the GameData object
+ * The GameData is a NetworkBehaviour object
+ * It is controlled by the server, not the client
+ */
+public class GameView : MonoBehaviour
 {
-
+#pragma warning disable 0649
     [SerializeField] private Button _startButton;
     [SerializeField] private Button _winButton;
     [SerializeField] private Button _restartButton;
+#pragma warning restore 0649
+
     public GameData gameData;
 
     // Start is called before the first frame update
@@ -38,16 +47,16 @@ public class FakeGame : MonoBehaviour
 
     public void StartGame()
     {
-        gameData.status = GameStatus.Started;
+        gameData.CmdSetStatus(GameStatus.Started);
     }
 
     public void WinGame()
     {
-        gameData.status = GameStatus.Finished;
+        gameData.CmdSetStatus(GameStatus.Finished);
     }
 
     public void ResetGame()
     {
-       gameData.status = GameStatus.NotStarted;
+       gameData.CmdSetStatus(GameStatus.NotStarted);
     }
 }

@@ -11,7 +11,7 @@ public class CustomNetworkManager : NetworkManager
     public delegate void ClientDisconnectedFromServer(NetworkConnection conn);
     public static ClientDisconnectedFromServer OnClientDisconnectedFromServer;
 
-    public delegate void PlayerAddedToServer(NetworkConnection conn, Player newPlayer);
+    public delegate void PlayerAddedToServer(Player newPlayer);
     public static PlayerAddedToServer OnPlayerAddedToServer;
 
     public static CustomNetworkManager Instance { get; private set; }
@@ -50,8 +50,9 @@ public class CustomNetworkManager : NetworkManager
         Debug.Log("Player added");
         GameObject createdPlayer = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
         Player player = createdPlayer.GetComponent<Player>();
+        player.Connection = conn;
         ConnectedPlayers.Add(player);
         NetworkServer.AddPlayerForConnection(conn, createdPlayer);
-        OnPlayerAddedToServer?.Invoke(conn, player);
+        OnPlayerAddedToServer?.Invoke(player);
     }
 }

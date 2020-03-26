@@ -12,8 +12,6 @@ public class GameManager : MonoBehaviour
     public Transform gamesHolder;
     public GameData gameDataTemplate;
 
-    public GameObject dummyDebug;
-
     private void Awake()
     {
         if(Instance == null)
@@ -46,5 +44,6 @@ public class GameManager : MonoBehaviour
     {
         NetworkServer.Spawn(game.gameObject, player.gameObject);
         game.transform.position = Vector3.zero;
+        DevicesMonitor.Instance.SetCurrentGame(player, game);
     }
 }

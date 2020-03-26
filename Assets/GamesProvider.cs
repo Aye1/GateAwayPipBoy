@@ -5,7 +5,7 @@ using System.Linq;
 
 public class GamesProvider : MonoBehaviour
 {
-    public List<FakeGame> games;
+    public List<GameView> games;
     public Transform gamesHolder;
     public static GamesProvider Instance { get; private set; }
 
@@ -26,7 +26,7 @@ public class GamesProvider : MonoBehaviour
         if(games.Any())
         {
             int selectedIndex = 0;
-            FakeGame createdGame = Instantiate(games[selectedIndex], Vector3.zero, Quaternion.identity, gamesHolder);
+            GameView createdGame = Instantiate(games[selectedIndex], Vector3.zero, Quaternion.identity, gamesHolder);
             createdGame.gameData = data;
             createdGame.transform.localPosition = Vector3.zero;
         }

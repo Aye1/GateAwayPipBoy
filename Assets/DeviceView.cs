@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using Mirror;
 
-public class Device : MonoBehaviour
+public class DeviceView : MonoBehaviour
 {
-    //public NetworkConnection Connection { get; set; }
-
+#pragma warning disable 0649
     [SerializeField] private TextMeshProUGUI _connectionIdText;
     [SerializeField] private TextMeshProUGUI _addressText;
     [SerializeField] private TextMeshProUGUI _debugInfo;
+    [SerializeField] private GameInfoPanel _gameInfo;
+#pragma warning restore 0649
 
     public Player player;
 
@@ -29,11 +29,16 @@ public class Device : MonoBehaviour
             _addressText.text = player.Connection.address;
             _debugInfo.text = player.debugInfo;
         }
-        /*else
+        else
         {
-            _connectionIdText.text = "Connection " + Connection.connectionId;
-            _addressText.text = Connection.address;
-            _debugInfo.text = "No player associated";
-        }*/
+            _connectionIdText.text = "Player not found";
+            _addressText.text = "N/A";
+            _debugInfo.text = "N/A";
+        }
+    }
+
+    public void SetCurrentGame(GameData gameData)
+    {
+        _gameInfo.gameData = gameData;
     }
 }

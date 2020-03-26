@@ -10,17 +10,9 @@ public class Player : NetworkBehaviour
     [SyncVar]
     public string debugInfo = "test";
 
-    private int debugInt;
-
-    private void Update()
-    {
-        CmdUpdateInfo();
-    }
-
     [Command]
-    public void CmdUpdateInfo()
+    public void CmdSetDebugInfo(string info)
     {
-        debugInt++;
-        debugInfo = debugInt.ToString();
+        debugInfo = info;
     }
 }

@@ -1,45 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using Mirror;
 using TMPro;
-using System;
 
-public class PlayerInfoPanel : NetworkBehaviour
+public class PlayerInfoPanel : MonoBehaviour
 {
+#pragma warning disable 0649
     [SerializeField] private TMP_InputField _nameInputField;
-    public Player currentPlayer;
+#pragma warning restore 0649
+
+    public Player player;
 
     // Start is called before the first frame update
     void Start()
     {
-        //CustomNetworkManager.OnPlayerAddedToServer += OnPlayerAddedToServer;
+        _nameInputField.text = player.debugInfo;
         _nameInputField.onEndEdit.AddListener(OnInputFieldEndEdit);
+        _nameInputField.onValueChanged.AddListener(OnInputFieldEndEdit);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
-    /*private void OnPlayerAddedToServer(NetworkConnection conn, Player player)
-    {
-        if(conn.identity == netIdentity)
-        {
-            currentPlayer = player;
-        }
-    }*/
 
     private void OnInputFieldEndEdit(string text)
     {
-        currentPlayer.debugInfo = text;
-    }
-
-    public override void OnStartLocalPlayer()
-    {
-        base.OnStartLocalPlayer();
-        //currentPlayer = DevicesMonitor.Instance.GetPlayerWithNetworkIdentity(netIdentity);
-        Debug.Log("player info panel onstartlocalplayer");
+        player.CmdSetDebugInfo(text);
     }
 }

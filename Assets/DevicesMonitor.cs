@@ -6,11 +6,11 @@ using System.Linq;
 
 public class DevicesMonitor : GameMasterBehaviour
 {
-    [SerializeField] private Device _deviceTemplate;
+    [SerializeField] private DeviceView _deviceTemplate;
 
     public static DevicesMonitor Instance { get; private set; }
 
-    public List<Device> ConnectedDevices { get; private set; }
+    public List<DeviceView> ConnectedDevices { get; private set; }
 
     private void Awake()
     {
@@ -27,23 +27,14 @@ public class DevicesMonitor : GameMasterBehaviour
 
     protected override void Init()
     {
-        ConnectedDevices = new List<Device>();
-        //CustomNetworkManager.OnClientConnectedToServer += AddClient;
+        ConnectedDevices = new List<DeviceView>();
         CustomNetworkManager.OnClientDisconnectedFromServer += RemoveClient;
         CustomNetworkManager.OnPlayerAddedToServer += AddPlayer;
     }
 
-
-    /*private void AddClient(NetworkConnection conn)
-    {
-        Device createdDevice = Instantiate(_deviceTemplate, Vector3.zero, Quaternion.identity, transform);
-        createdDevice.Connection = conn;
-        ConnectedDevices.Add(createdDevice);
-    }*/
-
     private void RemoveClient(NetworkConnection conn)
     {
-        Device device = ConnectedDevices.First(x => x.player.Connection == conn);
+        DeviceView device = ConnectedDevices.First(x => x.player.Connection == conn);
         if(device != null)
         {
             ConnectedDevices.Remove(device);
@@ -51,17 +42,20 @@ public class DevicesMonitor : GameMasterBehaviour
         }
     }
 
-    private void AddPlayer(NetworkConnection conn, Player player)
+    private void AddPlayer(Player player)
     {
-        Device createdDevice = Instantiate(_deviceTemplate, Vector3.zero, Quaternion.identity, transform);
-        //createdDevice.Connection = conn;
+        DeviceView createdDevice = Instantiate(_deviceTemplate, Vector3.zero, Quaternion.identity, transform);
         createdDevice.player = player;
-        player.Connection = conn;
         ConnectedDevices.Add(createdDevice);
     }
 
-    /*public Player GetPlayerWithNetworkIdentity(NetworkIdentity identity)
+    public void SetCurrentGame(Player player, GameData gameData)
     {
-        return ConnectedDevices.First(x => x.player.netIdentity == identity).player;
-    }*/
+        DeviceView currentDevice = ConnectedDevices.First(x => x.player == player);
+        if(currentDevice != null)
+        {
+            currentDevice.SetCurrentGame(gameData);
+        }
+    }
+
 }

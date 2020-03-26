@@ -7,18 +7,10 @@ public enum GameStatus { NotStarted, Started, Finished };
 
 public class GameData : NetworkBehaviour
 {
+    [SyncVar]
     public GameStatus status;
+    [SyncVar]
     public string gameName;
-    
-    private void Start()
-    {
-        Init();
-    }
-
-    protected virtual void Init()
-    {
-
-    }
 
     public override void OnStartClient()
     {
@@ -28,5 +20,13 @@ public class GameData : NetworkBehaviour
         {
             GamesProvider.Instance.CreateGame(this);
         }
+    }
+
+    // Only the server can control the data
+    // We force it to run the status update with [Command]
+    [Command]
+    public void CmdSetStatus(GameStatus status)
+    {
+        this.status = status;
     }
 }
