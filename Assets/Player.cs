@@ -15,4 +15,13 @@ public class Player : NetworkBehaviour
     {
         debugInfo = info;
     }
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        if(netIdentity.isClient)
+        {
+            PlayerInfoManager.Instance.CreatePlayerInfo(this);
+        }
+    }
 }

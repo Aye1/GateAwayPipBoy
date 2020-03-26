@@ -7,13 +7,22 @@ public class PlayerInfoManager : MonoBehaviour
 
     [SerializeField] private PlayerInfoPanel _infoPanel;
 
-    // Start is called before the first frame update
-    void Start()
+    public static PlayerInfoManager Instance { get; private set; }
+
+    private void Awake()
     {
-        CustomNetworkManager.OnPlayerAddedToServer += OnPlayerAddedToServer;
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
-    private void OnPlayerAddedToServer(Player player)
+    public void CreatePlayerInfo(Player player)
     {
         PlayerInfoPanel createdPanel = Instantiate(_infoPanel, Vector3.zero, Quaternion.identity, transform);
         createdPanel.player = player;
