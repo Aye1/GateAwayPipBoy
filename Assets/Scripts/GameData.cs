@@ -18,9 +18,12 @@ public class GameData : NetworkBehaviour
     public delegate void GameExit(GameData data);
     public GameExit OnGameExit;
 
-    public void Start()
+    public virtual void InitGame() { }
+
+    private void Awake()
     {
         playerIdentities = new SyncNIList();
+        InitGame();
     }
 
     public override void OnStartClient()

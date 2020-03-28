@@ -15,6 +15,9 @@ public class CustomNetworkManager : NetworkManager
     public delegate void PlayerAddedToServer(Player newPlayer);
     public static PlayerAddedToServer OnPlayerAddedToServer;
 
+    public delegate void PlayerRemovedFromServer(Player player);
+    public static PlayerRemovedFromServer OnPlayerRemovedFromServer;
+
     public static CustomNetworkManager Instance { get; private set; }
 
     public List<Player> ConnectedPlayers { get; private set; }
@@ -53,8 +56,17 @@ public class CustomNetworkManager : NetworkManager
         Player player = createdPlayer.GetComponent<Player>();
         player.Connection = conn;
         ConnectedPlayers.Add(player);
+        player.debugInfo = "Debug - " + ConnectedPlayers.Count();
         NetworkServer.AddPlayerForConnection(conn, createdPlayer);
         OnPlayerAddedToServer?.Invoke(player);
+    }
+
+    public override void OnServerRemovePlayer(NetworkConnection conn, NetworkIdentity player)
+    {
+        base.OnServerRemovePlayer(conn, player);
+        Player exitingPlayer = GetPlayer(conn);
+        ConnectedPlayers.Remove(exitingPlayer);
+        OnPlayerRemovedFromServer?.Invoke(exitingPlayer);
     }
 
     public Player GetPlayer(NetworkConnection connection)

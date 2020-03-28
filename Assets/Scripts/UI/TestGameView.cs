@@ -63,5 +63,6 @@ public class TestGameView : GameView
     public void ExitGame()
     {
         gameData.CmdExit();
+        Destroy(gameObject);
     }
 }
