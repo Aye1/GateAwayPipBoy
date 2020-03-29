@@ -44,14 +44,26 @@ public class SymbolGameData : GameData
 
     public void AddSymbol(char symbol)
     {
+        // Go back to empty state
         if (currentText.Length == result.Length)
         {
             currentText = "";
+            status = GameStatus.Started;
         }
-        currentText += symbol;
-        if(currentText == result)
+        else
         {
-            status = GameStatus.Finished;
+            currentText += symbol;
+            if (currentText.Length == result.Length)
+            {
+                if (currentText == result)
+                {
+                    status = GameStatus.Won;
+                }
+                else
+                {
+                    status = GameStatus.Failed;
+                }
+            }
         }
     }
 }

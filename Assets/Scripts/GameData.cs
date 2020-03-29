@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-public enum GameStatus { NotStarted, Started, Finished };
+public enum GameStatus { NotStarted, Started, Won, Failed, Finished };
 
 public class GameData : NetworkBehaviour
 {

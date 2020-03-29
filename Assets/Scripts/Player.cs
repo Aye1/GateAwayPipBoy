@@ -21,7 +21,7 @@ public class Player : NetworkBehaviour
     public override void OnStartClient()
     {
         base.OnStartClient();
-        if(netIdentity.isClient)
+        if(netIdentity.hasAuthority)
         {
             PlayerInfoManager.Instance.CreatePlayerInfo(this);
         }
