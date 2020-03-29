@@ -14,8 +14,6 @@ public class SymbolGameView : GameView
     [SerializeField] private Color failColor;
 #pragma warning restore 0649
 
-
-
     private SymbolGameData GameData
     {
         get { return (SymbolGameData)gameData; }

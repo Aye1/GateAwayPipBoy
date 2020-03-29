@@ -5,15 +5,21 @@ using UnityEngine;
 using Mirror;
 using System.Linq;
 
+[Serializable]
+public struct GameBinding
+{
+    public GameType gameType;
+    public GameData gameData;
+    public GameView gameView;
+    public GameControlData gameControlData;
+    public GameControlView gameControlView;
+}
+
 public class GameManager : MonoBehaviour
 {
 
     public static GameManager Instance { get; private set; }
-    private List<GameData> _currentGames;
-    public Transform gamesHolder;
-    public GameData gameDataTemplate;
-    public SymbolControlData symbolControlDataTemplate;
-    public SymbolGameData symbolGameDataTemplate;
+    public List<GameBinding> games;
 
    [HideInInspector] public static readonly string allSymbols = "$%#@!*1234567890;:ABCDEFGHIJKLMNOPQRSTUVWXYZ^&";
 
@@ -28,33 +34,44 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    // Start is called before the first frame update
-    void Start()
+
+    public GameBinding GetGame(GameType type)
     {
-        _currentGames = new List<GameData>();   
+        return games.FirstOrDefault(x => x.gameType == type);
     }
 
-    public void DebugSendGameToAllClients()
+    public void LaunchTestGame()
     {
-        foreach(Player player in CustomNetworkManager.Instance.ConnectedPlayers)
+        LaunchGame(GameType.TestGame);
+    }
+
+    public void LaunchGame(GameType type)
+    {
+        GameBinding binding = GetGame(type);
+        GameData data = Instantiate(binding.gameData);
+        NetworkServer.Spawn(data.gameObject);
+        CustomNetworkManager.Instance.ConnectedPlayers.ForEach(x => DevicesMonitor.Instance.SetCurrentGame(x, data));
+        CreateControls(binding, data);
+    }
+
+    // Basic control repartition
+    // Each player has the same control
+    // TODO: refacto and adapt to each game
+    public void CreateControls(GameBinding binding, GameData mainData)
+    {
+        foreach (Player player in CustomNetworkManager.Instance.ConnectedPlayers)
         {
-            GameData createdGame = Instantiate(gameDataTemplate);
-            createdGame.CmdAddPlayer(player.netIdentity);
-            SendGame(createdGame, player);
+            GameControlData controlData = Instantiate(binding.gameControlData);
+            NetworkServer.Spawn(controlData.gameObject, player.gameObject);
         }
     }
 
-    public void SendGame(GameData game, Player player)
-    {
-        NetworkServer.Spawn(game.gameObject, player.gameObject);
-        game.transform.position = Vector3.zero;
-        DevicesMonitor.Instance.SetCurrentGame(player, game);
-    }
-
+    // TODO: refacto this part
     #region Symbol Game
     public void LaunchSymbolGame()
     {
-        SymbolGameData gameData = Instantiate(symbolGameDataTemplate);
+        GameBinding binding = GetGame(GameType.SymbolGame);
+        SymbolGameData gameData = (SymbolGameData)Instantiate(binding.gameData);
         NetworkServer.Spawn(gameData.gameObject);
         SpawnSymbolGame(gameData);
     }
@@ -80,16 +97,15 @@ public class GameManager : MonoBehaviour
 
     private SymbolControlData CreateSymbolData(char symbol, SymbolGameData mainGameData)
     {
-        SymbolControlData createdData = Instantiate(symbolControlDataTemplate);
+        GameBinding binding = GetGame(GameType.SymbolGame);
+        SymbolControlData createdData = (SymbolControlData)Instantiate(binding.gameControlData);
         createdData.symbol = symbol;
-        createdData.mainGameData = mainGameData;
         return createdData;
     }
 
     public void SendSymbolControl(SymbolControlData data, Player player)
     {
         NetworkServer.Spawn(data.gameObject, player.gameObject);
-        data.transform.position = Vector3.zero;
     }
     #endregion
 }

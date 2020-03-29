@@ -1,14 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Mirror;
 
-public enum GameStatus { NotStarted, Started, Won, Failed, Finished };
+public enum GameStatus { NotStarted, Started, Won, Failed };
+public enum GameType { TestGame, SymbolGame };
 
-public class GameData : NetworkBehaviour
+public abstract class GameData : NetworkBehaviour
 {
     [SyncVar]
-    public GameStatus status;
+    public GameStatus status = GameStatus.NotStarted;
     [SyncVar]
     public string gameName;
 
@@ -18,12 +17,15 @@ public class GameData : NetworkBehaviour
     public delegate void GameExit(GameData data);
     public GameExit OnGameExit;
 
-    public virtual void InitGame() { }
+    public abstract void InitGame();
+    public abstract GameType GetGameType();
+    public abstract string GetGameName();
 
     private void Awake()
     {
         playerIdentities = new SyncNIList();
         InitGame();
+        gameName = GetGameName();
     }
 
     public override void OnStartClient()
@@ -32,14 +34,13 @@ public class GameData : NetworkBehaviour
         Debug.Log("Starting game on client");
         if(netIdentity.isClient)
         {
-            GamesProvider.Instance.CreateGame(this);
+            GamesViewsManager.Instance.CreateGameView(this);
         }
     }
 
     // Only the server can control the data
     // We force it to run the status update with [Command]
-    [Command]
-    public void CmdSetStatus(GameStatus status)
+    public void SetStatus(GameStatus status)
     {
         this.status = status;
     }

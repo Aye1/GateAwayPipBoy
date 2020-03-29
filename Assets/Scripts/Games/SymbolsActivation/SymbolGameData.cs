@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-using Mirror;
+﻿using Mirror;
 
 public class SymbolGameData : GameData
 {
@@ -17,9 +15,18 @@ public class SymbolGameData : GameData
 
     public override void InitGame()
     {
-        gameName = "Symbol Game";
         CreateResult();
         status = GameStatus.Started;
+    }
+
+    public override GameType GetGameType()
+    {
+        return GameType.SymbolGame;
+    }
+
+    public override string GetGameName()
+    {
+        return "Symbols Game";
     }
 
     private void CreateResult()

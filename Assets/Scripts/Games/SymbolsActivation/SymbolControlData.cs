@@ -1,26 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Mirror;
+﻿using Mirror;
 
-public class SymbolControlData : NetworkBehaviour
+public class SymbolControlData : GameControlData
 {
     [SyncVar]
     public char symbol;
-
-    public SymbolGameData mainGameData;
-
-    public override void OnStartClient()
+    
+    public SymbolGameData MainSymbolGameData
     {
-        if(hasAuthority)
-        {
-            GamesProvider.Instance.CreateSymbolControl(this);
-        }
+        get { return ((SymbolGameData) MainGameData); }
     }
 
     [Command]
     public void CmdSendSymbol()
     {
-        mainGameData.AddSymbol(symbol);
+        MainSymbolGameData.AddSymbol(symbol);
     }
 }

@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Mirror;
+﻿using Mirror;
 using System;
 
 [Serializable]
@@ -10,7 +7,7 @@ public class Player : NetworkBehaviour
     public NetworkConnection Connection { get; set; }
 
     [SyncVar]
-    public string debugInfo = "test";
+    public string debugInfo = "N/A";
 
     [Command]
     public void CmdSetDebugInfo(string info)
@@ -20,7 +17,6 @@ public class Player : NetworkBehaviour
 
     public override void OnStartClient()
     {
-        base.OnStartClient();
         if(netIdentity.hasAuthority)
         {
             PlayerInfoManager.Instance.CreatePlayerInfo(this);
