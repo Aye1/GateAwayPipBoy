@@ -50,7 +50,11 @@ public class GameManager : MonoBehaviour
         GameBinding binding = GetGame(type);
         GameData data = Instantiate(binding.gameData);
         NetworkServer.Spawn(data.gameObject);
-        CustomNetworkManager.Instance.ConnectedPlayers.ForEach(x => DevicesMonitor.Instance.SetCurrentGame(x, data));
+        foreach(Player player in CustomNetworkManager.Instance.ConnectedPlayers)
+        {
+            DevicesMonitor.Instance.SetCurrentGame(player, data);
+            data.AddPlayer(player.netIdentity);
+        }
         CreateControls(binding, data);
     }
 
@@ -79,7 +83,11 @@ public class GameManager : MonoBehaviour
     public void SpawnSymbolGame(SymbolGameData gameData)
     {
         List<Player> players = CustomNetworkManager.Instance.ConnectedPlayers;
-        players.ForEach(x => DevicesMonitor.Instance.SetCurrentGame(x, gameData));
+        foreach(Player player in players)
+        {
+            DevicesMonitor.Instance.SetCurrentGame(player, gameData);
+            gameData.AddPlayer(player.netIdentity);
+        }
         string result = gameData.result;
         // Shuffling the characters order
         List<char> possibleSymbolsShuffled = result.ToCharArray().OrderBy(x => Guid.NewGuid()).ToList();

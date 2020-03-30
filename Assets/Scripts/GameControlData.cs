@@ -8,10 +8,18 @@ public abstract class GameControlData : NetworkBehaviour
 
     public override void OnStartClient()
     {
+        // TODO: can we pass the main data differently?
         MainGameData = FindObjectOfType<GameData>();
         if (hasAuthority)
         {
             GamesViewsManager.Instance.CreateControlView(this);
         }
+    }
+
+    [Command]
+    public void CmdExit()
+    {
+        MainGameData.PlayerExit(NetworkClient.connection.identity);
+        Destroy(gameObject);
     }
 }

@@ -56,7 +56,21 @@ public class DevicesMonitor : GameMasterBehaviour
         if(currentDevice != null)
         {
             currentDevice.SetCurrentGame(gameData);
-            gameData.OnGameExit += ExitGame;
+            gameData.OnPlayerExitsGame += PlayerExitsGame;
+        }
+    }
+
+    public void PlayerExitsGame(GameData game, NetworkIdentity playerIdentity)
+    {
+        RemoveGameForPlayer(playerIdentity);
+    }
+
+    public void RemoveGameForPlayer(NetworkIdentity playerIdentitiy)
+    {
+        DeviceView associatedView = GetDeviceForPlayer(playerIdentitiy);
+        if (associatedView != null)
+        {
+            associatedView.SetCurrentGame(null);
         }
     }
 
@@ -64,11 +78,7 @@ public class DevicesMonitor : GameMasterBehaviour
     {
         foreach(NetworkIdentity player in game.playerIdentities)
         {
-            DeviceView associatedView = GetDeviceForPlayer(player);
-            if (associatedView != null)
-            {
-                associatedView.SetCurrentGame(null);
-            }
+            RemoveGameForPlayer(player);
         }
     }
 
@@ -82,4 +92,8 @@ public class DevicesMonitor : GameMasterBehaviour
         return ConnectedDevices.First(x => x.player.netIdentity == playerIdentity);
     }
 
+    private DeviceView GetDeviceForPlayer(NetworkConnection playerConnection)
+    {
+        return ConnectedDevices.First(x => x.player.Connection == playerConnection);
+    }
 }

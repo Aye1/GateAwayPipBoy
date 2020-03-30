@@ -9,7 +9,7 @@ public class TestGameControlView : GameControlView
     [SerializeField] private Button _winButton;
     [SerializeField] private Button _loseButton;
     [SerializeField] private Button _restartButton;
-    //[SerializeField] private Button _closeButton;
+    [SerializeField] private Button _closeButton;
 #pragma warning restore 0649
 
     private TestGameControlData TestControlData
@@ -27,7 +27,7 @@ public class TestGameControlView : GameControlView
         _winButton.onClick.AddListener(WinGame);
         _loseButton.onClick.AddListener(LoseGame);
         _restartButton.onClick.AddListener(ResetGame);
-        //_closeButton.onClick.AddListener(ExitGame);
+        _closeButton.onClick.AddListener(ExitGame);
     }
 
     public void Update()
@@ -72,10 +72,4 @@ public class TestGameControlView : GameControlView
     {
         TestControlData.CmdSetStatus(GameStatus.NotStarted);
     }
-
-    /*public void ExitGame()
-    {
-        gameData.CmdExit();
-        Destroy(gameObject);
-    }*/
 }

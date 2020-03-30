@@ -889,6 +889,7 @@ MonoBehaviour:
   _winButton: {fileID: 4142713764329832764}
   _loseButton: {fileID: 2710376160651489348}
   _restartButton: {fileID: 8464028208997102373}
+  _closeButton: {fileID: 550060855358483279}
 --- !u!222 &8137493770436412660
 CanvasRenderer:
   m_ObjectHideFlags: 0

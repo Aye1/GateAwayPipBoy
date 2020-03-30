@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public abstract class GameControlView : MonoBehaviour
 {
@@ -22,4 +20,11 @@ public abstract class GameControlView : MonoBehaviour
     }
 
     protected abstract void UpdateUI();
+
+
+    public void ExitGame()
+    {
+        ControlData.CmdExit();
+        Destroy(GetComponentInParent<GameView>().gameObject);
+    }
 }
