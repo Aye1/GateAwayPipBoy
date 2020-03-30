@@ -43,16 +43,9 @@ public abstract class GameData : NetworkBehaviour
         }
     }
 
-    // Only the server can control the data
-    // We force it to run the status update with [Command]
     public void SetStatus(GameStatus status)
     {
         this.status = status;
-    }
-
-    public void PlayerExit()
-    {
-        PlayerExit(NetworkClient.connection.identity);
     }
 
     public void PlayerExit(NetworkIdentity identity)
@@ -64,11 +57,6 @@ public abstract class GameData : NetworkBehaviour
     public void ExitGame()
     {
         OnGameExit?.Invoke(this);
-        DestroyGame();
-    }
-
-    public void DestroyGame()
-    {
         Destroy(gameObject);
     }
 
