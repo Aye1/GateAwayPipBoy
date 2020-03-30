@@ -50,6 +50,11 @@ public abstract class GameData : NetworkBehaviour
         this.status = status;
     }
 
+    public void PlayerExit()
+    {
+        PlayerExit(NetworkClient.connection.identity);
+    }
+
     public void PlayerExit(NetworkIdentity identity)
     {
         RemovePlayer(identity);
@@ -59,6 +64,7 @@ public abstract class GameData : NetworkBehaviour
     public void ExitGame()
     {
         OnGameExit?.Invoke(this);
+        DestroyGame();
     }
 
     public void DestroyGame()

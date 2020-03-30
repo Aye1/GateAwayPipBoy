@@ -17,9 +17,9 @@ public abstract class GameControlData : NetworkBehaviour
     }
 
     [Command]
-    public void CmdExit()
+    public void CmdExit(NetworkIdentity playerIdentity)
     {
-        MainGameData.PlayerExit(NetworkClient.connection.identity);
+        MainGameData.PlayerExit(playerIdentity);
         Destroy(gameObject);
     }
 }

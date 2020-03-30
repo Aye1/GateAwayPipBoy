@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Mirror;
 
 public abstract class GameControlView : MonoBehaviour
 {
@@ -24,7 +25,7 @@ public abstract class GameControlView : MonoBehaviour
 
     public void ExitGame()
     {
-        ControlData.CmdExit();
+        ControlData.CmdExit(NetworkClient.connection.identity);
         Destroy(GetComponentInParent<GameView>().gameObject);
     }
 }
