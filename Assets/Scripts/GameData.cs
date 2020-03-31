@@ -37,10 +37,10 @@ public abstract class GameData : NetworkBehaviour
     {
         base.OnStartClient();
         Debug.Log("Starting game on client");
-        if(netIdentity.isClient)
-        {
+        //if(netIdentity.isClient)
+        //{
             GamesViewsManager.Instance.CreateGameView(this);
-        }
+        //}
     }
 
     public void SetStatus(GameStatus status)

@@ -13,6 +13,7 @@ public class SymbolControlData : GameControlData
     [Command]
     public void CmdSendSymbol()
     {
+        // TODO: this does not work in server only mode
         MainSymbolGameData.AddSymbol(symbol);
     }
 }

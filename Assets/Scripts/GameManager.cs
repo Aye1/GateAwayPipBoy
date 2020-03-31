@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
 
    [HideInInspector] public static readonly string allSymbols = "$%#@!*1234567890;:ABCDEFGHIJKLMNOPQRSTUVWXYZ^&";
 
-    private void Awake()
+    public void Awake()
     {
         if(Instance == null)
         {

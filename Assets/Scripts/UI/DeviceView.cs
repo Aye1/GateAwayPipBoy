@@ -14,16 +14,10 @@ public class DeviceView : MonoBehaviour
 
     public Player player;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {
-        if (player != null)
+        if (player != null && player.Connection != null)
         {
             _connectionIdText.text = "Connection " + player.Connection.connectionId;
             _addressText.text = player.Connection.address;
