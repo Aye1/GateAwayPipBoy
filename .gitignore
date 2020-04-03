@@ -62,3 +62,6 @@ crashlytics-build.properties
 Library/
 
 .DS_Store
+
+# Blender files
+*.blender
