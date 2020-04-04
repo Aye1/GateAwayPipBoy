@@ -35,4 +35,9 @@ public class DeviceView : MonoBehaviour
     {
         _gameInfo.gameData = gameData;
     }
+
+    public GameData GetCurrentGame()
+    {
+        return _gameInfo.gameData;
+    }
 }

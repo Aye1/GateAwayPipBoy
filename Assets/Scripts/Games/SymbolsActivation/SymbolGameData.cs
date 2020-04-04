@@ -1,4 +1,7 @@
 ﻿using Mirror;
+using System.Collections.Generic;
+using System.Linq;
+using System;
 
 public class SymbolGameData : GameData
 {
@@ -72,5 +75,25 @@ public class SymbolGameData : GameData
                 }
             }
         }
+    }
+
+    public override void CreateControls()
+    {
+        List<SymbolControlData> controls = new List<SymbolControlData>();
+        // Shuffling the characters order
+        List<char> possibleSymbolsShuffled = result.ToCharArray().OrderBy(x => Guid.NewGuid()).ToList();
+
+        while (possibleSymbolsShuffled.Count > 0)
+        {
+            char nextChar = possibleSymbolsShuffled[0];
+            possibleSymbolsShuffled.RemoveAt(0);
+            SymbolControlData data = (SymbolControlData)GameManager.Instance.CreateControlData(GameType.SymbolGame);
+            data.MainGameNetworkIdentity = netIdentity;
+            //data.MainGameData = this;
+            data.symbol = nextChar;
+            controls.Add(data);
+        }
+        // TODO: send only to specific players
+        GameManager.Instance.SendControlsRoundRobin(controls, CustomNetworkManager.Instance.ConnectedPlayers);
     }
 }

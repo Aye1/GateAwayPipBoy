@@ -7,4 +7,9 @@ public class TestGameControlData : GameControlData
     {
         MainGameData.SetStatus(status);
     }
+
+    public override GameType GetGameType()
+    {
+        return GameType.TestGame;
+    }
 }

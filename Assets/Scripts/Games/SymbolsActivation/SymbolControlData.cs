@@ -16,4 +16,9 @@ public class SymbolControlData : GameControlData
         // TODO: this does not work in server only mode
         MainSymbolGameData.AddSymbol(symbol);
     }
+
+    public override GameType GetGameType()
+    {
+        return GameType.SymbolGame;
+    }
 }

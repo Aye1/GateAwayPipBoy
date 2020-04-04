@@ -3,6 +3,7 @@
 public class GamesViewsManager : MonoBehaviour
 {
     public Transform gamesHolder;
+    public Transform controlsHolder;
     public static GamesViewsManager Instance { get; private set; }
 
     private void Awake()
@@ -29,9 +30,7 @@ public class GamesViewsManager : MonoBehaviour
     {
         GameType type = data.GetGameType();
         GameBinding binding = GameManager.Instance.GetGame(type);
-        //TODO: is there a better way to pass the main view?
-        Transform holder = FindObjectOfType<GameView>().controlsHolder;
-        GameControlView view = Instantiate(binding.gameControlView, Vector3.zero, Quaternion.identity, holder);
+        GameControlView view = Instantiate(binding.gameControlView, Vector3.zero, Quaternion.identity, controlsHolder);
         view.ControlData = data;
         view.transform.localPosition = Vector3.zero;
     }

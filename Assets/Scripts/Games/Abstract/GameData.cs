@@ -24,23 +24,28 @@ public abstract class GameData : NetworkBehaviour
     public abstract void InitGame();
     public abstract GameType GetGameType();
     public abstract string GetGameName();
+    public abstract void CreateControls();
 
     private void Awake()
     {
         playerIdentities = new SyncNIList();
-        InitGame();
         gameName = GetGameName();
+        InitGame();
         CustomNetworkManager.OnClientDisconnectedFromServer += CheckIfPlayerWasPlayingThisGame;
+    }
+
+    public override void OnStartServer()
+    {
+        base.OnStartServer();
+        CreateControls();
     }
 
     public override void OnStartClient()
     {
         base.OnStartClient();
         Debug.Log("Starting game on client");
-        //if(netIdentity.isClient)
-        //{
-            GamesViewsManager.Instance.CreateGameView(this);
-        //}
+
+        GamesViewsManager.Instance.CreateGameView(this);
     }
 
     public void SetStatus(GameStatus status)

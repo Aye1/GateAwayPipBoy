@@ -42,78 +42,91 @@ public class GameManager : MonoBehaviour
 
     public void LaunchTestGame()
     {
-        LaunchGame(GameType.TestGame);
+        LaunchGame(GameType.TestGame, CustomNetworkManager.Instance.ConnectedPlayers);
     }
 
-    public void LaunchGame(GameType type)
+    public void LaunchSymbolGame()
     {
-        GameBinding binding = GetGame(type);
-        GameData data = Instantiate(binding.gameData);
-        NetworkServer.Spawn(data.gameObject);
-        foreach(Player player in CustomNetworkManager.Instance.ConnectedPlayers)
+        LaunchGame(GameType.SymbolGame, CustomNetworkManager.Instance.ConnectedPlayers);
+    }
+
+    public void LaunchGame(GameType type, IEnumerable<Player> players)
+    {
+        GameData data = CreateGameData(type);
+        foreach(Player player in players)
         {
             DevicesMonitor.Instance.SetCurrentGame(player, data);
             data.AddPlayer(player.netIdentity);
         }
-        CreateControls(binding, data);
+        // TODO: check on view spawning if the player is in this game
+        NetworkServer.Spawn(data.gameObject);
     }
 
-    // Basic control repartition
-    // Each player has the same control
-    // TODO: refacto and adapt to each game
-    public void CreateControls(GameBinding binding, GameData mainData)
+    public GameData CreateGameData(GameType type)
     {
-        foreach (Player player in CustomNetworkManager.Instance.ConnectedPlayers)
+        GameBinding binding = GetGame(type);
+        GameData data = Instantiate(binding.gameData);
+        return data;
+    }
+
+    public GameControlData CreateControlData(GameType type)
+    {
+        GameBinding binding = GetGame(type);
+        GameControlData data = Instantiate(binding.gameControlData);
+        return data;
+    }
+
+    public void SendControlBroadcast(GameControlData control, IEnumerable<Player> players)
+    {
+        SendControlsBroadcast(new List<GameControlData>() { control }, players);
+    }
+    
+    public void SendControlsBroadcast(IEnumerable<GameControlData> controls, IEnumerable<Player> players)
+    {
+        foreach(GameControlData control in controls)
         {
-            GameControlData controlData = Instantiate(binding.gameControlData);
-            NetworkServer.Spawn(controlData.gameObject, player.gameObject);
+          foreach(Player player in players)
+            {
+                NetworkServer.Spawn(control.gameObject, player.gameObject);
+            }
         }
     }
 
-    // TODO: refacto this part
-    #region Symbol Game
-    public void LaunchSymbolGame()
+    public void SendControlsRoundRobin(IEnumerable<GameControlData> controls, IEnumerable<Player> players)
     {
-        GameBinding binding = GetGame(GameType.SymbolGame);
-        SymbolGameData gameData = (SymbolGameData)Instantiate(binding.gameData);
-        NetworkServer.Spawn(gameData.gameObject);
-        SpawnSymbolGame(gameData);
-    }
-
-    public void SpawnSymbolGame(SymbolGameData gameData)
-    {
-        List<Player> players = CustomNetworkManager.Instance.ConnectedPlayers;
-        foreach(Player player in players)
+        if (players != null && players.Count() > 0)
         {
-            DevicesMonitor.Instance.SetCurrentGame(player, gameData);
-            gameData.AddPlayer(player.netIdentity);
+            int nextPlayerIndex = 0;
+            foreach (GameControlData controlData in controls)
+            {
+                SendControlData(controlData, players.ToArray()[nextPlayerIndex]);
+                nextPlayerIndex = (nextPlayerIndex + 1) % players.Count();
+            }
         }
-        string result = gameData.result;
-        // Shuffling the characters order
-        List<char> possibleSymbolsShuffled = result.ToCharArray().OrderBy(x => Guid.NewGuid()).ToList();
-        int nextPlayerIndex = 0;
-
-        while(possibleSymbolsShuffled.Count > 0)
-        {
-            char nextChar = possibleSymbolsShuffled[0];
-            possibleSymbolsShuffled.RemoveAt(0);
-            SymbolControlData data = CreateSymbolData(nextChar, gameData);
-            SendSymbolControl(data, players[nextPlayerIndex]);
-            nextPlayerIndex = (nextPlayerIndex + 1) % players.Count;
-        }
-    }
-
-    private SymbolControlData CreateSymbolData(char symbol, SymbolGameData mainGameData)
-    {
-        GameBinding binding = GetGame(GameType.SymbolGame);
-        SymbolControlData createdData = (SymbolControlData)Instantiate(binding.gameControlData);
-        createdData.symbol = symbol;
-        return createdData;
     }
 
     public void SendSymbolControl(SymbolControlData data, Player player)
     {
         NetworkServer.Spawn(data.gameObject, player.gameObject);
     }
-    #endregion
+
+    public void SendControlData(GameControlData data, Player player)
+    {
+        NetworkServer.Spawn(data.gameObject, player.gameObject);
+    }
+
+    public GameData GetGameDataForPlayer(Player player)
+    {
+        return DevicesMonitor.Instance.GetCurrentGame(player);
+    }
+
+    public GameData GetGameDataForPlayer(NetworkConnection playerConnection)
+    {
+        return GetGameDataForPlayer(CustomNetworkManager.Instance.GetPlayer(playerConnection));
+    }
+
+    public GameData GetGameDataForPlayer(NetworkIdentity playerIdentity)
+    {
+        return GetGameDataForPlayer(CustomNetworkManager.Instance.GetPlayer(playerIdentity));
+    }
 }

@@ -60,6 +60,16 @@ public class DevicesMonitor : GameMasterBehaviour
         }
     }
 
+    public GameData GetCurrentGame(Player player)
+    {
+        DeviceView currentDevice = GetDeviceForPlayer(player);
+        if(currentDevice != null)
+        {
+            return currentDevice.GetCurrentGame();
+        }
+        return null;
+    }
+
     public void PlayerExitsGame(GameData game, NetworkIdentity playerIdentity)
     {
         RemoveGameForPlayer(playerIdentity);
