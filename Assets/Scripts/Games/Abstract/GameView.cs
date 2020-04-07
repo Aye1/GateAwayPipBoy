@@ -5,5 +5,4 @@ using UnityEngine;
 public class GameView : MonoBehaviour
 {
     public GameData gameData;
-    public Transform controlsHolder;
 }

@@ -42,12 +42,22 @@ public class GameManager : MonoBehaviour
 
     public void LaunchTestGame()
     {
-        LaunchGame(GameType.TestGame, CustomNetworkManager.Instance.ConnectedPlayers);
+        LaunchGameWithAllPlayers(GameType.TestGame);
     }
 
     public void LaunchSymbolGame()
     {
-        LaunchGame(GameType.SymbolGame, CustomNetworkManager.Instance.ConnectedPlayers);
+        LaunchGameWithAllPlayers(GameType.SymbolGame);
+    }
+
+    public void LaunchMazeGame()
+    {
+        LaunchGameWithAllPlayers(GameType.MazeGame);
+    }
+
+    public void LaunchGameWithAllPlayers(GameType type)
+    {
+        LaunchGame(type, CustomNetworkManager.Instance.ConnectedPlayers);
     }
 
     public void LaunchGame(GameType type, IEnumerable<Player> players)

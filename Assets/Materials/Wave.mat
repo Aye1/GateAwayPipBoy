@@ -70,9 +70,12 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - Vector1_544FF7BA: 32.4
-    - Vector1_70B95535: 11.7
+    - Vector1_6E671085: 59
+    - Vector1_70B95535: 12.45
     - Vector1_74C0985D: 0.1
     - Vector1_927C7C4A: 47.6
+    - Vector1_CF00B62C: 24.7
+    - Vector1_E9501C6F: 41.07
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
@@ -108,5 +111,5 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _PlayerPos: {r: 4.53, g: 31.51, b: 0, a: 0}
+    - _PlayerPos: {r: 26.5, g: 27, b: 0, a: 0}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}

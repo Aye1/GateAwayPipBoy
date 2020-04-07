@@ -3,7 +3,7 @@ using Mirror;
 using System.Linq;
 
 public enum GameStatus { NotStarted, Started, Won, Failed };
-public enum GameType { TestGame, SymbolGame };
+public enum GameType { TestGame, SymbolGame, MazeGame };
 
 public abstract class GameData : NetworkBehaviour
 {
