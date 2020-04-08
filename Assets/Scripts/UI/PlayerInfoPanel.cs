@@ -8,6 +8,7 @@ public class PlayerInfoPanel : MonoBehaviour
 #pragma warning disable 0649
     [SerializeField] private TMP_InputField _nameInputField;
     [SerializeField] private TextMeshProUGUI _teamNameText;
+    [SerializeField] private TextMeshProUGUI _playerTypeText;
 #pragma warning restore 0649
 
     public Player player;
@@ -21,6 +22,7 @@ public class PlayerInfoPanel : MonoBehaviour
 
     private void Update()
     {
+        _playerTypeText.text = player.playerType.ToString();
         if (player.teamIdentity != null)
         {
             _teamNameText.text = player.teamIdentity.GetComponent<Team>().teamName;
