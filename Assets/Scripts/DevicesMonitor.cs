@@ -46,6 +46,7 @@ public class DevicesMonitor : GameMasterBehaviour
     private void AddPlayer(Player player)
     {
         DeviceView createdDevice = Instantiate(_deviceTemplate, Vector3.zero, Quaternion.identity, transform);
+        createdDevice.transform.localPosition = Vector3.zero;
         createdDevice.player = player;
         ConnectedDevices.Add(createdDevice);
     }

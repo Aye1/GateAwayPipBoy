@@ -3,7 +3,7 @@
 public abstract class GameControlData : NetworkBehaviour
 {
     [SyncVar(hook = "OnValueChange")]
-    public NetworkIdentity MainGameNetworkIdentity;
+    protected NetworkIdentity MainGameNetworkIdentity;
 
     public GameData MainGameData { get; set; }
 

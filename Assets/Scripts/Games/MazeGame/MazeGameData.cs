@@ -17,11 +17,16 @@ public class MazeGameData : GameData
         {
             MazeGameControlData controlData = (MazeGameControlData) GameManager.Instance.CreateControlData(GetGameType());
             controlData.direction = direction;
-            controlData.MainGameNetworkIdentity = netIdentity;
+            controlData.SetMainGameIdentity(netIdentity);
             controls.Add(controlData);
         }
         // TODO: send only to specific players
         GameManager.Instance.SendControlsRoundRobin(controls, CustomNetworkManager.Instance.ConnectedPlayers);
+    }
+
+    public override DisplayType GetDisplayType()
+    {
+        return DisplayType.TabletOnly;
     }
 
     public override string GetGameName()

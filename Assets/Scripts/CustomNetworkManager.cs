@@ -6,6 +6,7 @@ using System.Linq;
 
 public class CustomNetworkManager : NetworkManager
 {
+    #region Events
     public delegate void ClientConnectedToServer(NetworkConnection conn);
     public static ClientConnectedToServer OnClientConnectedToServer;
 
@@ -14,11 +15,14 @@ public class CustomNetworkManager : NetworkManager
 
     public delegate void PlayerAddedToServer(Player newPlayer);
     public static PlayerAddedToServer OnPlayerAddedToServer;
+    #endregion
 
     public static CustomNetworkManager Instance { get; private set; }
 
     public List<Player> ConnectedPlayers { get; private set; }
 
+    public PlayerType playerType;
+ 
     public override void Awake()
     {
         base.Awake();
@@ -32,6 +36,12 @@ public class CustomNetworkManager : NetworkManager
         {
             Destroy(gameObject);
         }
+    }
+
+    public void StartClient(PlayerType type)
+    {
+        StartClient();
+        playerType = type;
     }
 
     public override void OnServerConnect(NetworkConnection conn)

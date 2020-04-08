@@ -1,31 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Mirror;
+﻿using Mirror;
 
 public static class MirrorHelpers
-{
-    /*public static Player GetLocalPlayer()
+{ 
+    public static Player GetClientLocalPlayer(NetworkIdentity objectIdentity)
     {
-        List<Player> players = CustomNetworkManager.Instance.ConnectedPlayers;
-        foreach(Player player in players)
+        Player player = null;
+        if (objectIdentity.isClient)
         {
-            if(player.netIdentity.isLocalPlayer)
-            {
-                return player;
-            }
+            player = NetworkClient.connection.identity.GetComponent<Player>();
         }
-        return null;
+        return player;
     }
-
-    public static NetworkIdentity GetLocalPlayerIdentity()
-    {
-        Player localPlayer = GetLocalPlayer();
-        if(localPlayer != null)
-        {
-            return localPlayer.netIdentity;
-        }
-        return null;
-    }*/
 
 }

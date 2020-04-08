@@ -4,9 +4,11 @@ using System.Linq;
 
 public enum GameStatus { NotStarted, Started, Won, Failed };
 public enum GameType { TestGame, SymbolGame, MazeGame };
+public enum DisplayType { Unknown, TabletOnly, PhoneOnly, TabletAndPhone };
 
 public abstract class GameData : NetworkBehaviour
 {
+    #region Sync Vars
     [SyncVar]
     public GameStatus status = GameStatus.NotStarted;
     [SyncVar]
@@ -14,17 +16,21 @@ public abstract class GameData : NetworkBehaviour
 
     public class SyncNIList : SyncList<NetworkIdentity> { }
     public SyncNIList playerIdentities;
+    #endregion
 
+    #region Events
     public delegate void GameExit(GameData data);
     public GameExit OnGameExit;
 
     public delegate void PlayerExitsGame(GameData data, NetworkIdentity player);
     public PlayerExitsGame OnPlayerExitsGame;
+    #endregion
 
     public abstract void InitGame();
     public abstract GameType GetGameType();
     public abstract string GetGameName();
     public abstract void CreateControls();
+    public abstract DisplayType GetDisplayType();
 
     private void Awake()
     {
@@ -44,8 +50,11 @@ public abstract class GameData : NetworkBehaviour
     {
         base.OnStartClient();
         Debug.Log("Starting game on client");
-
-        GamesViewsManager.Instance.CreateGameView(this);
+        Player associatedPlayer = MirrorHelpers.GetClientLocalPlayer(netIdentity);
+        if(TypesHelpers.HasMatchingType(GetDisplayType(), associatedPlayer.playerType))
+        {
+            GamesViewsManager.Instance.CreateGameView(this);
+        }
     }
 
     public void SetStatus(GameStatus status)

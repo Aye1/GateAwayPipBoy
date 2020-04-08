@@ -95,4 +95,9 @@ public class SymbolGameData : GameData
         // TODO: send only to specific players
         GameManager.Instance.SendControlsRoundRobin(controls, CustomNetworkManager.Instance.ConnectedPlayers);
     }
+
+    public override DisplayType GetDisplayType()
+    {
+        return DisplayType.TabletAndPhone;
+    }
 }

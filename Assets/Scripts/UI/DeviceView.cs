@@ -7,6 +7,7 @@ public class DeviceView : MonoBehaviour
 {
 #pragma warning disable 0649
     [SerializeField] private TextMeshProUGUI _connectionIdText;
+    [SerializeField] private TextMeshProUGUI _typeText;
     [SerializeField] private TextMeshProUGUI _addressText;
     [SerializeField] private TextMeshProUGUI _debugInfo;
     [SerializeField] private GameInfoPanel _gameInfo;
@@ -20,12 +21,14 @@ public class DeviceView : MonoBehaviour
         if (player != null && player.Connection != null)
         {
             _connectionIdText.text = "Connection " + player.Connection.connectionId;
+            _typeText.text = player.playerType.ToString();
             _addressText.text = player.Connection.address;
             _debugInfo.text = player.debugInfo;
         }
         else
         {
             _connectionIdText.text = "Player not found";
+            _typeText.text = "N/A";
             _addressText.text = "N/A";
             _debugInfo.text = "N/A";
         }

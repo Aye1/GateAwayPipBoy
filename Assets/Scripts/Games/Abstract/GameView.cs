@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class GameView : MonoBehaviour
+public abstract class GameView : MonoBehaviour
 {
     public GameData gameData;
 }

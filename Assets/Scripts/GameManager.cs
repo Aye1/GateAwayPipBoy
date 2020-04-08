@@ -124,19 +124,4 @@ public class GameManager : MonoBehaviour
     {
         NetworkServer.Spawn(data.gameObject, player.gameObject);
     }
-
-    public GameData GetGameDataForPlayer(Player player)
-    {
-        return DevicesMonitor.Instance.GetCurrentGame(player);
-    }
-
-    public GameData GetGameDataForPlayer(NetworkConnection playerConnection)
-    {
-        return GetGameDataForPlayer(CustomNetworkManager.Instance.GetPlayer(playerConnection));
-    }
-
-    public GameData GetGameDataForPlayer(NetworkIdentity playerIdentity)
-    {
-        return GetGameDataForPlayer(CustomNetworkManager.Instance.GetPlayer(playerIdentity));
-    }
 }
