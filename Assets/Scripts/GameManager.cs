@@ -75,14 +75,14 @@ public class GameManager : MonoBehaviour
     public GameData CreateGameData(GameType type)
     {
         GameBinding binding = GetGame(type);
-        GameData data = Instantiate(binding.gameData);
+        GameData data = Instantiate(binding.gameData, Vector3.zero, Quaternion.identity, transform);
         return data;
     }
 
     public GameControlData CreateControlData(GameType type)
     {
         GameBinding binding = GetGame(type);
-        GameControlData data = Instantiate(binding.gameControlData);
+        GameControlData data = Instantiate(binding.gameControlData, Vector3.zero, Quaternion.identity, transform);
         return data;
     }
 
@@ -113,11 +113,6 @@ public class GameManager : MonoBehaviour
                 nextPlayerIndex = (nextPlayerIndex + 1) % players.Count();
             }
         }
-    }
-
-    public void SendSymbolControl(SymbolControlData data, Player player)
-    {
-        NetworkServer.Spawn(data.gameObject, player.gameObject);
     }
 
     public void SendControlData(GameControlData data, Player player)

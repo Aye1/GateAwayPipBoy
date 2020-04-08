@@ -15,6 +15,9 @@ public class CustomNetworkManager : NetworkManager
 
     public delegate void PlayerAddedToServer(Player newPlayer);
     public static PlayerAddedToServer OnPlayerAddedToServer;
+
+    public delegate void ServerStarted();
+    public static ServerStarted OnServerStarted;
     #endregion
 
     public static CustomNetworkManager Instance { get; private set; }
@@ -42,6 +45,12 @@ public class CustomNetworkManager : NetworkManager
     {
         StartClient();
         playerType = type;
+    }
+
+    public override void OnStartServer()
+    {
+        base.OnStartServer();
+        OnServerStarted?.Invoke();
     }
 
     public override void OnServerConnect(NetworkConnection conn)

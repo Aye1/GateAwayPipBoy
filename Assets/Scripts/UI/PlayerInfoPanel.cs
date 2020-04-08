@@ -7,6 +7,7 @@ public class PlayerInfoPanel : MonoBehaviour
 {
 #pragma warning disable 0649
     [SerializeField] private TMP_InputField _nameInputField;
+    [SerializeField] private TextMeshProUGUI _teamNameText;
 #pragma warning restore 0649
 
     public Player player;
@@ -16,6 +17,14 @@ public class PlayerInfoPanel : MonoBehaviour
     {
         _nameInputField.text = player.debugInfo;
         _nameInputField.onEndEdit.AddListener(OnInputFieldEndEdit);
+    }
+
+    private void Update()
+    {
+        if (player.teamIdentity != null)
+        {
+            _teamNameText.text = player.teamIdentity.GetComponent<Team>().teamName;
+        }
     }
 
     private void OnInputFieldEndEdit(string text)

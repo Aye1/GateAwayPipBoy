@@ -1,38 +1,61 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 using static TMPro.TMP_Dropdown;
 
 public class TeamSelector : MonoBehaviour
 {
     [SerializeField] private TMP_Dropdown _dropdown;
-    private Team[] _teams;
+    private List<Team> _teams;
+
+    #region Events
+    public delegate void TeamChanged(Team newTeam);
+    public event TeamChanged OnTeamChanged;
+    #endregion
 
     // Start is called before the first frame update
     void Start()
     {
         _dropdown = GetComponentInChildren<TMP_Dropdown>();
+        _dropdown.onValueChanged.AddListener(delegate { OnTeamValueChanges(); });
         PopulateDropdown();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     private void PopulateDropdown()
     {
-        _teams = TeamManager.Instance.teams.ToArray();
+        _teams = TeamManager.Instance.teams;
         List<OptionData> options = new List<OptionData>();
-        for(int i = 0; i < _teams.Length; i++)
-        {
+        foreach(Team team in _teams) { 
             OptionData option = new OptionData();
-            option.text = _teams[i].teamName;
+            option.text = team.teamName;
             options.Add(option);
         }
         _dropdown.AddOptions(options);
+    }
+
+    private void OnTeamValueChanges()
+    {
+        Team newTeam = TeamForOption(_dropdown.value);
+        OnTeamChanged?.Invoke(newTeam);
+    }
+
+    public void SetTeam(Team team)
+    {
+        SetTeam(team.teamId);
+    }
+
+    public void SetTeam(int teamId)
+    {
+        _dropdown.value = teamId;
+    }
+
+    private Team TeamForOption(int option)
+    {
+        return _teams.ToArray()[option];
+    }
+
+    private int OptionForTeam(Team team)
+    {
+        return _teams.IndexOf(team);
     }
 }

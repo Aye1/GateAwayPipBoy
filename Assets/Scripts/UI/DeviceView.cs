@@ -11,9 +11,15 @@ public class DeviceView : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _addressText;
     [SerializeField] private TextMeshProUGUI _debugInfo;
     [SerializeField] private GameInfoPanel _gameInfo;
+    [SerializeField] private TeamSelector _teamSelector;
 #pragma warning restore 0649
 
     public Player player;
+
+    private void Start()
+    {
+        _teamSelector.OnTeamChanged += UpdateTeam;
+    }
 
     // Update is called once per frame
     void Update()
@@ -24,6 +30,11 @@ public class DeviceView : MonoBehaviour
             _typeText.text = player.playerType.ToString();
             _addressText.text = player.Connection.address;
             _debugInfo.text = player.debugInfo;
+            if (player.teamIdentity != null)
+            {
+                Team startTeam = player.teamIdentity.GetComponent<Team>();
+                _teamSelector.SetTeam(startTeam);
+            }
         }
         else
         {
@@ -42,5 +53,14 @@ public class DeviceView : MonoBehaviour
     public GameData GetCurrentGame()
     {
         return _gameInfo.gameData;
+    }
+
+    private void UpdateTeam(Team team)
+    {
+        //int teamId = TeamManager.Instance.GetTeamId(team);
+        //player.CmdSetTeamIdentity(team.netIdentity);
+        // We are on the server, we don't need to call the command (+ it does not work)
+        player.teamIdentity = team.netIdentity;
+        //player.CmdSetTeamId(teamId);
     }
 }
