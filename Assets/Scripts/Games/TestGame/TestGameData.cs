@@ -6,7 +6,6 @@ public class TestGameData : GameData
     {
         GameControlData control = GameManager.Instance.CreateControlData(GameType.TestGame);
         control.MainGameNetworkIdentity = netIdentity;
-        //control.MainGameData = this;
         // TODO: select only specific players
         GameManager.Instance.SendControlBroadcast(control, CustomNetworkManager.Instance.ConnectedPlayers);
     }

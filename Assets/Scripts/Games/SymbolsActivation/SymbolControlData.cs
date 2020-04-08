@@ -7,7 +7,7 @@ public class SymbolControlData : GameControlData
     
     public SymbolGameData MainSymbolGameData
     {
-        get { return ((SymbolGameData) MainGameData); }
+        get { return (SymbolGameData) MainGameData; }
     }
 
     [Command]

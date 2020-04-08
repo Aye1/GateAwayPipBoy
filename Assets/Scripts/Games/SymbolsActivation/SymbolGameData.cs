@@ -88,8 +88,7 @@ public class SymbolGameData : GameData
             char nextChar = possibleSymbolsShuffled[0];
             possibleSymbolsShuffled.RemoveAt(0);
             SymbolControlData data = (SymbolControlData)GameManager.Instance.CreateControlData(GameType.SymbolGame);
-            data.MainGameNetworkIdentity = netIdentity;
-            //data.MainGameData = this;
+            data.SetMainGameIdentity(netIdentity);
             data.symbol = nextChar;
             controls.Add(data);
         }

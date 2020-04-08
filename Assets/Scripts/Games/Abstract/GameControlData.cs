@@ -37,15 +37,30 @@ public abstract class GameControlData : NetworkBehaviour
         }
     }
 
-    public void OnValueChange(NetworkIdentity oldIdentity, NetworkIdentity newIdentity)
+    // Find Main Game Data with its identity
+    // This method sets it for the server
+    // For the client, it's set in OnValueChange
+    public void SetMainGameIdentity(NetworkIdentity identity)
     {
-        MainGameNetworkIdentity = newIdentity;
+        MainGameNetworkIdentity = identity;
+        FindMainGameData();
+    }
+
+    private void FindMainGameData()
+    {
         if (MainGameNetworkIdentity != null)
         {
             MainGameData = MainGameNetworkIdentity.GetComponent<GameData>();
             mainGameDataSet = true;
             CheckIsReady();
         }
+    }
+
+    // Sets the Main Game Data for the client
+    public void OnValueChange(NetworkIdentity oldIdentity, NetworkIdentity newIdentity)
+    {
+        MainGameNetworkIdentity = newIdentity;
+        FindMainGameData();
     }
 
     [Command]
