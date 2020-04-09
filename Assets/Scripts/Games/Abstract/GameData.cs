@@ -14,8 +14,9 @@ public abstract class GameData : NetworkBehaviour
     [SyncVar]
     public string gameName;
 
+    [System.Serializable]
     public class SyncNIList : SyncList<NetworkIdentity> { }
-    public SyncNIList playerIdentities;
+    public SyncNIList playerIdentities = new SyncNIList();
     #endregion
 
     #region Events
@@ -34,10 +35,9 @@ public abstract class GameData : NetworkBehaviour
 
     private void Awake()
     {
-        playerIdentities = new SyncNIList();
         gameName = GetGameName();
         InitGame();
-        CustomNetworkManager.OnClientDisconnectedFromServer += CheckIfPlayerWasPlayingThisGame;
+        CustomNetworkManager.OnClientWillDisconnectFromServer += CheckIfPlayerWasPlayingThisGame;
     }
 
     public override void OnStartServer()
@@ -49,7 +49,6 @@ public abstract class GameData : NetworkBehaviour
     public override void OnStartClient()
     {
         base.OnStartClient();
-        Debug.Log("Starting game on client");
         Player associatedPlayer = MirrorHelpers.GetClientLocalPlayer(netIdentity);
         if(TypesHelpers.HasMatchingType(GetDisplayType(), associatedPlayer.playerType))
         {

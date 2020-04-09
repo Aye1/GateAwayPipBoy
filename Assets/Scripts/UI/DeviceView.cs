@@ -29,7 +29,7 @@ public class DeviceView : MonoBehaviour
             _connectionIdText.text = "Connection " + player.Connection.connectionId;
             _typeText.text = player.playerType.ToString();
             _addressText.text = player.Connection.address;
-            _debugInfo.text = player.debugInfo;
+            _debugInfo.text = player.playerName;
             if (player.teamIdentity != null)
             {
                 Team startTeam = player.teamIdentity.GetComponent<Team>();

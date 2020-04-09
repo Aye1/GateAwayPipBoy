@@ -11,6 +11,7 @@ public class GamesViewsManager : MonoBehaviour
         if(Instance == null)
         {
             Instance = this;
+            CustomNetworkManager.OnClientDisconnected += ClearAllViews;
         } else
         {
             Destroy(gameObject);
@@ -33,5 +34,17 @@ public class GamesViewsManager : MonoBehaviour
         GameControlView view = Instantiate(binding.gameControlView, Vector3.zero, Quaternion.identity, controlsHolder);
         view.ControlData = data;
         view.transform.localPosition = Vector3.zero;
+    }
+
+    public void ClearAllViews()
+    {
+        foreach(Transform t in gamesHolder)
+        {
+            Destroy(t);
+        }
+        foreach(Transform t in controlsHolder)
+        {
+            Destroy(t);
+        }
     }
 }

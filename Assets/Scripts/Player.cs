@@ -9,21 +9,18 @@ public class Player : NetworkBehaviour
     public NetworkConnection Connection { get; set; }
 
     [SyncVar]
-    public string debugInfo = "N/A";
+    public string playerName = "N/A";
 
     [SyncVar]
     public PlayerType playerType;
-
-    /*[SyncVar]
-    public int teamId;*/
 
     [SyncVar]
     public NetworkIdentity teamIdentity;
 
     [Command]
-    public void CmdSetDebugInfo(string info)
+    public void CmdSetPlayerName(string name)
     {
-        debugInfo = info;
+        playerName = name;
     }
 
     [Command]
@@ -38,28 +35,13 @@ public class Player : NetworkBehaviour
         teamIdentity = identity;
     }
 
-    /*[Command]
-    public void CmdSetTeamId(int id)
-    {
-        teamId = id;
-    }*/
-
-    /*public override void OnStartServer()
-    {
-        //CmdSetTeamIdentity(TeamManager.Instance.GetTeam(2).netIdentity);
-        NetworkIdentity defaultTeamIdentity = TeamManager.Instance.GetTeam(2).netIdentity;
-        teamIdentity = defaultTeamIdentity;
-    }*/
-
     public override void OnStartClient()
     {
         if(netIdentity.hasAuthority)
         {
             CmdSetPlayerType(CustomNetworkManager.Instance.playerType);
             // We init every player on first team 
-            //CmdSetTeamId(2);
-            NetworkIdentity defaultTeamIdentity = TeamManager.Instance.GetTeam(2).netIdentity;
-            //teamIdentity = defaultTeamIdentity;
+            NetworkIdentity defaultTeamIdentity = TeamManager.Instance.GetTeam(0).netIdentity;
             CmdSetTeamIdentity(defaultTeamIdentity);
             PlayerInfoManager.Instance.CreatePlayerInfo(this);
         }

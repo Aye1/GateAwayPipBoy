@@ -13,6 +13,12 @@ public class CustomNetworkManager : NetworkManager
     public delegate void ClientDisconnectedFromServer(NetworkConnection conn);
     public static ClientDisconnectedFromServer OnClientDisconnectedFromServer;
 
+    public delegate void ClientWillDisconnectFromServer(NetworkConnection conn);
+    public static ClientWillDisconnectFromServer OnClientWillDisconnectFromServer;
+
+    public delegate void ClientDisconnected();
+    public static ClientDisconnected OnClientDisconnected;
+
     public delegate void PlayerAddedToServer(Player newPlayer);
     public static PlayerAddedToServer OnPlayerAddedToServer;
 
@@ -61,6 +67,7 @@ public class CustomNetworkManager : NetworkManager
 
     public override void OnServerDisconnect(NetworkConnection conn)
     {
+        OnClientWillDisconnectFromServer?.Invoke(conn);
         base.OnServerDisconnect(conn);
         Player player = GetPlayer(conn);
         ConnectedPlayers.Remove(player);
@@ -74,9 +81,16 @@ public class CustomNetworkManager : NetworkManager
         Player player = createdPlayer.GetComponent<Player>();
         player.Connection = conn;
         ConnectedPlayers.Add(player);
-        player.debugInfo = "Debug - " + ConnectedPlayers.Count();
+        player.playerName = "Player " + ConnectedPlayers.Count();
         NetworkServer.AddPlayerForConnection(conn, createdPlayer);
         OnPlayerAddedToServer?.Invoke(player);
+    }
+
+    // WARNING: this is never called at the moment, bug on the Mirror side
+    public override void OnClientDisconnect(NetworkConnection conn)
+    {
+        base.OnClientDisconnect(conn);
+        OnClientDisconnected?.Invoke();
     }
 
     public Player GetPlayer(NetworkConnection connection)

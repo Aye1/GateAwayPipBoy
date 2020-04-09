@@ -16,7 +16,7 @@ public class PlayerInfoPanel : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _nameInputField.text = player.debugInfo;
+        _nameInputField.text = player.playerName;
         _nameInputField.onEndEdit.AddListener(OnInputFieldEndEdit);
     }
 
@@ -31,6 +31,6 @@ public class PlayerInfoPanel : MonoBehaviour
 
     private void OnInputFieldEndEdit(string text)
     {
-        player.CmdSetDebugInfo(text);
+        player.CmdSetPlayerName(text);
     }
 }

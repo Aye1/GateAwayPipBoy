@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
     public List<GameBinding> games;
 
-   [HideInInspector] public static readonly string allSymbols = "$%#@!*1234567890;:ABCDEFGHIJKLMNOPQRSTUVWXYZ^&";
+   [HideInInspector] public static readonly string allSymbols = "$%#@!*1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ^&";
 
     public void Awake()
     {
@@ -102,17 +102,33 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SendControlsRoundRobin(IEnumerable<GameControlData> controls, IEnumerable<Player> players)
+    /// <summary>
+    /// Sends the controls to all given players, in a round-robin repartition
+    /// </summary>
+    /// <param name="controls">The list of controls to send</param>
+    /// <param name="players">The list of players playing this game</param>
+    /// <returns>A dictionary matching each control with its player</returns>
+    public Dictionary<GameControlData, Player> SendControlsRoundRobin(IEnumerable<GameControlData> controls, IEnumerable<Player> players)
     {
+        Dictionary<GameControlData, Player> repartition = new Dictionary<GameControlData, Player>();
         if (players != null && players.Count() > 0)
         {
             int nextPlayerIndex = 0;
             foreach (GameControlData controlData in controls)
             {
-                SendControlData(controlData, players.ToArray()[nextPlayerIndex]);
+                Player currentPlayer = players.ToArray()[nextPlayerIndex];
+                SendControlData(controlData, currentPlayer);
                 nextPlayerIndex = (nextPlayerIndex + 1) % players.Count();
+                repartition.Add(controlData, currentPlayer);
             }
         }
+        return repartition;
+    }
+
+    public Dictionary<GameControlData, Player> SendControlsRoundRobin(IEnumerable<GameControlData> controls, IEnumerable<NetworkIdentity> playerIdentities)
+    {
+        IEnumerable<Player> players = playerIdentities.Select(x => x.GetComponent<Player>());
+        return SendControlsRoundRobin(controls, players);
     }
 
     public void SendControlData(GameControlData data, Player player)

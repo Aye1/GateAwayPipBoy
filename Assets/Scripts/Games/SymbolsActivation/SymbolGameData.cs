@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using UnityEngine;
 
 public class SymbolGameData : GameData
 {
@@ -30,6 +31,11 @@ public class SymbolGameData : GameData
     public override string GetGameName()
     {
         return "Symbols Game";
+    }
+
+    public override DisplayType GetDisplayType()
+    {
+        return DisplayType.TabletAndPhone;
     }
 
     private void CreateResult()
@@ -93,11 +99,22 @@ public class SymbolGameData : GameData
             controls.Add(data);
         }
         // TODO: send only to specific players
-        GameManager.Instance.SendControlsRoundRobin(controls, CustomNetworkManager.Instance.ConnectedPlayers);
+        Dictionary<GameControlData, Player> repartition = GameManager.Instance.SendControlsRoundRobin(controls, playerIdentities);
+        //CreatePartialResults(repartition);
     }
 
-    public override DisplayType GetDisplayType()
+    private void CreatePartialResults(Dictionary<GameControlData, Player> repartition)
     {
-        return DisplayType.TabletAndPhone;
+        
+    }
+
+    private string CreateResultWithoutCharacters(List<char> charsToRemove)
+    {
+        string res = result;
+        foreach(char charToRemove in charsToRemove)
+        {
+            res = res.Replace(charToRemove, '_');
+        }
+        return res;
     }
 }
