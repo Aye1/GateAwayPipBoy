@@ -6,8 +6,7 @@ public class TestGameData : GameData
     {
         GameControlData control = GameManager.Instance.CreateControlData(GameType.TestGame);
         control.SetMainGameIdentity(netIdentity);
-        // TODO: select only specific players
-        GameManager.Instance.SendControlBroadcast(control, CustomNetworkManager.Instance.ConnectedPlayers);
+        GameManager.Instance.SendControlBroadcast(control, playerIdentities);
     }
 
     public override DisplayType GetDisplayType()

@@ -14,6 +14,7 @@ public abstract class GameControlData : NetworkBehaviour
 
     public override void OnStartClient()
     {
+        transform.SetParent(GameManager.Instance.transform);
         if(hasAuthority)
         {
             clientStarted = true;

@@ -12,4 +12,8 @@ public static class MirrorHelpers
         return player;
     }
 
+    public static NetworkIdentity GetClientLocalPlayerIdentity(NetworkIdentity objectIdentity)
+    {
+        return GetClientLocalPlayer(objectIdentity).netIdentity;
+    }
 }

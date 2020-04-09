@@ -18,7 +18,13 @@ public class TeamSelector : MonoBehaviour
     {
         _dropdown = GetComponentInChildren<TMP_Dropdown>();
         _dropdown.onValueChanged.AddListener(delegate { OnTeamValueChanges(); });
-        PopulateDropdown();
+        if (TeamManager.Instance.teamsCreated)
+        {
+            PopulateDropdown();
+        } else
+        {
+            TeamManager.OnTeamsCreated += PopulateDropdown;
+        }
     }
 
     private void PopulateDropdown()
@@ -47,6 +53,11 @@ public class TeamSelector : MonoBehaviour
     public void SetTeam(int teamId)
     {
         _dropdown.value = teamId;
+    }
+
+    public Team GetTeam()
+    {
+        return TeamForOption(_dropdown.value);
     }
 
     private Team TeamForOption(int option)

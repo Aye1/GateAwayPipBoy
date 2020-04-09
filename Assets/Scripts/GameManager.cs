@@ -40,24 +40,14 @@ public class GameManager : MonoBehaviour
         return games.FirstOrDefault(x => x.gameType == type);
     }
 
-    public void LaunchTestGame()
+    public bool CanLaunchGame()
     {
-        LaunchGameWithAllPlayers(GameType.TestGame);
+        return NetworkServer.active;
     }
 
-    public void LaunchSymbolGame()
+    public bool CanLaunchGame(Team team)
     {
-        LaunchGameWithAllPlayers(GameType.SymbolGame);
-    }
-
-    public void LaunchMazeGame()
-    {
-        LaunchGameWithAllPlayers(GameType.MazeGame);
-    }
-
-    public void LaunchGameWithAllPlayers(GameType type)
-    {
-        LaunchGame(type, CustomNetworkManager.Instance.ConnectedPlayers);
+        return CanLaunchGame() && TeamManager.Instance.GetPlayersOfTeam(team).Count() > 0;
     }
 
     public void LaunchGame(GameType type, IEnumerable<Player> players)
@@ -89,6 +79,11 @@ public class GameManager : MonoBehaviour
     public void SendControlBroadcast(GameControlData control, IEnumerable<Player> players)
     {
         SendControlsBroadcast(new List<GameControlData>() { control }, players);
+    }
+
+    public void SendControlBroadcast(GameControlData control, IEnumerable<NetworkIdentity> playerIdentities)
+    {
+        SendControlBroadcast(control, playerIdentities.Select(x => x.GetComponent<Player>()));
     }
     
     public void SendControlsBroadcast(IEnumerable<GameControlData> controls, IEnumerable<Player> players)

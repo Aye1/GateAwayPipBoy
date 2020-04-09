@@ -49,8 +49,9 @@ public abstract class GameData : NetworkBehaviour
     public override void OnStartClient()
     {
         base.OnStartClient();
+        transform.SetParent(GameManager.Instance.transform);
         Player associatedPlayer = MirrorHelpers.GetClientLocalPlayer(netIdentity);
-        if(TypesHelpers.HasMatchingType(GetDisplayType(), associatedPlayer.playerType))
+        if(TypesHelpers.HasMatchingType(GetDisplayType(), associatedPlayer.playerType) && IsLocalPlayerInGame())
         {
             GamesViewsManager.Instance.CreateGameView(this);
         }
@@ -96,6 +97,11 @@ public abstract class GameData : NetworkBehaviour
         {
             ExitGame();
         }
+    }
+
+    public bool IsLocalPlayerInGame()
+    {
+        return playerIdentities.Contains(MirrorHelpers.GetClientLocalPlayerIdentity(netIdentity));
     }
 
     private NetworkIdentity GetPlayerWithConnection(NetworkConnection conn)

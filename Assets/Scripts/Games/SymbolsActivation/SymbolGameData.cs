@@ -98,7 +98,7 @@ public class SymbolGameData : GameData
             data.symbol = nextChar;
             controls.Add(data);
         }
-        // TODO: send only to specific players
+
         Dictionary<GameControlData, Player> repartition = GameManager.Instance.SendControlsRoundRobin(controls, playerIdentities);
         //CreatePartialResults(repartition);
     }

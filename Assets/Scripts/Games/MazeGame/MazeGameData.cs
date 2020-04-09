@@ -20,8 +20,7 @@ public class MazeGameData : GameData
             controlData.SetMainGameIdentity(netIdentity);
             controls.Add(controlData);
         }
-        // TODO: send only to specific players
-        GameManager.Instance.SendControlsRoundRobin(controls, CustomNetworkManager.Instance.ConnectedPlayers);
+        GameManager.Instance.SendControlsRoundRobin(controls, playerIdentities);
     }
 
     public override DisplayType GetDisplayType()

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using System.Linq;
 
 public class TeamManager : MonoBehaviour
 {
@@ -8,6 +9,10 @@ public class TeamManager : MonoBehaviour
 
     public static TeamManager Instance { get; private set; }
     public List<Team> teams;
+    public bool teamsCreated;
+
+    public delegate void TeamsCreated();
+    public static TeamsCreated OnTeamsCreated;
 
     private void Awake()
     {
@@ -53,6 +58,8 @@ public class TeamManager : MonoBehaviour
         team4.teamId = 3;
         NetworkServer.Spawn(team4.gameObject);
         teams.Add(team4);
+        teamsCreated = true;
+        OnTeamsCreated?.Invoke();
     }
 
     public Team GetTeam(int id)
@@ -71,6 +78,15 @@ public class TeamManager : MonoBehaviour
 
     public void ClientAddTeam(Team team)
     {
-        teams.Add(team);
+        if (!teams.Contains(team))
+        {
+            teams.Add(team);
+        }
+    }
+
+    public IEnumerable<Player> GetPlayersOfTeam(Team team)
+    {
+        List<Player> allPlayers = CustomNetworkManager.Instance.ConnectedPlayers;
+        return allPlayers.Where(x => x.teamIdentity == team.netIdentity);
     }
 }
