@@ -46,4 +46,16 @@ public class Player : NetworkBehaviour
             PlayerInfoManager.Instance.CreatePlayerInfo(this);
         }
     }
+
+    [Command]
+    public void CmdAskForSymbolPartialResult(NetworkIdentity identity)
+    {
+        SymbolGameData gameData = (SymbolGameData) DevicesMonitor.Instance.GetCurrentGame(identity.GetComponent<Player>());
+        gameData.SendPartialResult(identity);
+    }
+
+    public void AskForSymbolPartialResult()
+    {
+        CmdAskForSymbolPartialResult(netIdentity);
+    }
 }

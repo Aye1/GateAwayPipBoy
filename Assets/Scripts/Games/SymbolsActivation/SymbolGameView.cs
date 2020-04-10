@@ -30,7 +30,7 @@ public class SymbolGameView : GameView
 
     private void UpdateTexts()
     {
-        _answerText.text = GameData.result;
+        _answerText.text = GameData.clientPartialResult;
         _currentText.text = GetCurrentTextWithUnderscores();
     }
 

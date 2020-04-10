@@ -5,7 +5,9 @@ using System.Linq;
 
 public class TeamManager : MonoBehaviour
 {
+#pragma warning disable 0649
     [SerializeField] private Team _teamTemplate;
+#pragma warning restore 0649
 
     public static TeamManager Instance { get; private set; }
     public List<Team> teams;

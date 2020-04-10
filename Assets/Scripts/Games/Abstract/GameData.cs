@@ -42,13 +42,11 @@ public abstract class GameData : NetworkBehaviour
 
     public override void OnStartServer()
     {
-        base.OnStartServer();
         CreateControls();
     }
 
     public override void OnStartClient()
     {
-        base.OnStartClient();
         transform.SetParent(GameManager.Instance.transform);
         Player associatedPlayer = MirrorHelpers.GetClientLocalPlayer(netIdentity);
         if(TypesHelpers.HasMatchingType(GetDisplayType(), associatedPlayer.playerType) && IsLocalPlayerInGame())
