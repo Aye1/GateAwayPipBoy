@@ -65,3 +65,5 @@ Library/
 
 # Blender files
 *.blender
+
+Logs/
