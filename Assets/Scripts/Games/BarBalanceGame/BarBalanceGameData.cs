@@ -8,6 +8,8 @@ public class BarBalanceGameData : GameData
     public float currentValue;
     public float decreaseSpeed = 10;
 
+    private int maxValue = 100;
+
     public override void CreateControls()
     {
         var barControls = GameManager.Instance.CreateControlData(GameType.BarBalanceGame) as BarBalanceControlData;
@@ -38,12 +40,12 @@ public class BarBalanceGameData : GameData
 
     public void SetCurrentValue(float newValue)
     {
-        currentValue = newValue;
+        currentValue = Math.Min(100, Math.Max(0, newValue));
     }
 
     public void Increment(float addedValue)
     {
-        currentValue += addedValue;
+        currentValue = Math.Min(100, currentValue + addedValue);
     }
 
     public void Update()
