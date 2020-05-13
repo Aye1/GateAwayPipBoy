@@ -23,7 +23,7 @@ public class SymbolGameData : GameData
     public override void InitGame()
     {
         CreateResult();
-        status = GameStatus.Started;
+        SetStatus(GameStatus.Started);
     }
 
     public override GameType GetGameType()
@@ -75,7 +75,7 @@ public class SymbolGameData : GameData
         if (currentText.Length == result.Length)
         {
             currentText = "";
-            status = GameStatus.Started;
+            SetStatus(GameStatus.Started);
         }
         else
         {
@@ -84,11 +84,11 @@ public class SymbolGameData : GameData
             {
                 if (currentText == result)
                 {
-                    status = GameStatus.Won;
+                    SetStatus(GameStatus.Won);
                 }
                 else
                 {
-                    status = GameStatus.Failed;
+                    SetStatus(GameStatus.Failed);
                 }
             }
         }

@@ -23,7 +23,7 @@ public class GamesViewsManager : MonoBehaviour
         GameType type = data.GetGameType();
         GameBinding binding = GameManager.Instance.GetGame(type);
         GameView createdGame = Instantiate(binding.gameView, Vector3.zero, Quaternion.identity, gamesHolder);
-        createdGame.gameData = data;
+        createdGame.GameData = data;
         createdGame.transform.localPosition = Vector3.zero;
     }
 
@@ -40,11 +40,11 @@ public class GamesViewsManager : MonoBehaviour
     {
         foreach(Transform t in gamesHolder)
         {
-            Destroy(t);
+            Destroy(t.gameObject);
         }
         foreach(Transform t in controlsHolder)
         {
-            Destroy(t);
+            Destroy(t.gameObject);
         }
     }
 }

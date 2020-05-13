@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Mirror;
 using System.Linq;
+using System.Collections;
 
 public enum GameStatus { NotStarted, Started, Won, Failed };
 public enum GameType { TestGame, SymbolGame, MazeGame, BarBalanceGame };
@@ -9,7 +10,7 @@ public enum DisplayType { Unknown, TabletOnly, PhoneOnly, TabletAndPhone };
 public abstract class GameData : NetworkBehaviour
 {
     #region Sync Vars
-    [SyncVar]
+    [SyncVar(hook = "StatusSynced")]
     public GameStatus status = GameStatus.NotStarted;
     [SyncVar]
     public string gameName;
@@ -20,11 +21,14 @@ public abstract class GameData : NetworkBehaviour
     #endregion
 
     #region Events
-    public delegate void GameExit(GameData data);
+    public delegate void GameExit();
     public GameExit OnGameExit;
 
     public delegate void PlayerExitsGame(GameData data, NetworkIdentity player);
     public PlayerExitsGame OnPlayerExitsGame;
+
+    public delegate void StatusChanged(GameStatus newStatus);
+    public StatusChanged OnStatusChanged;
     #endregion
 
     public abstract void InitGame();
@@ -58,6 +62,16 @@ public abstract class GameData : NetworkBehaviour
     public void SetStatus(GameStatus status)
     {
         this.status = status;
+        OnStatusChanged?.Invoke(status);
+        if(status == GameStatus.Won)
+        {
+            StartCoroutine(DestroyGameAfterTime(5));
+        }
+    }
+
+    public void StatusSynced(GameStatus oldStatus, GameStatus newStatus)
+    {
+        SetStatus(newStatus);
     }
 
     public void PlayerExit(NetworkIdentity identity)
@@ -66,10 +80,10 @@ public abstract class GameData : NetworkBehaviour
         OnPlayerExitsGame?.Invoke(this, identity);
     }
 
-    public void ExitGame()
+    private void ExitGame()
     {
-        OnGameExit?.Invoke(this);
-        Destroy(gameObject);
+        OnGameExit?.Invoke();
+        GameManager.Instance.ClearAllGameData();
     }
 
     public void CheckIfPlayerWasPlayingThisGame(NetworkConnection conn)
@@ -93,7 +107,7 @@ public abstract class GameData : NetworkBehaviour
         playerIdentities.Remove(playerIdentity);
         if (playerIdentities.Count == 0)
         {
-            ExitGame();
+            StartCoroutine(DestroyGameAfterTime(1));
         }
     }
 
@@ -105,5 +119,11 @@ public abstract class GameData : NetworkBehaviour
     private NetworkIdentity GetPlayerWithConnection(NetworkConnection conn)
     {
         return playerIdentities.FirstOrDefault(x => x.connectionToClient == conn);
+    }
+
+    protected IEnumerator DestroyGameAfterTime(float timeInSeconds)
+    {
+        yield return new WaitForSeconds(timeInSeconds);
+        ExitGame();
     }
 }

@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -959,6 +959,8 @@ MonoBehaviour:
   - {fileID: 924221494034016814, guid: ad743385bb65049c18b05a51821fbbef, type: 3}
   - {fileID: 1858487189260131292, guid: 70e1c1f72419044f0946562165ddb977, type: 3}
   - {fileID: 8328841802367528032, guid: e558e6de64f534b719f957be746986ff, type: 3}
+  - {fileID: 4466636416967073533, guid: ba27f348d3d0e79458839f1d801cd160, type: 3}
+  - {fileID: 3933538543954277880, guid: b28b051282eaefe40a872a9de5e765f3, type: 3}
   playerType: 0
 --- !u!4 &498545228
 Transform:

@@ -9,6 +9,11 @@ public class BarBalanceGameView : GameView
 
     public void Update()
     {
-        bar.currentHeight = (gameData as BarBalanceGameData).currentValue;
+        bar.currentHeight = (GameData as BarBalanceGameData).currentValue;
+    }
+
+    protected override void OnGameStatusChanged(GameStatus newStatus)
+    {
+        //TODO
     }
 }

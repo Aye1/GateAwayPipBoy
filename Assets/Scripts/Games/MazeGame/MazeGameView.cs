@@ -9,7 +9,12 @@ public class MazeGameView : GameView
 
     public MazeGameData MazeData
     {
-        get { return (MazeGameData)gameData; }
+        get { return (MazeGameData)GameData; }
+    }
+
+    protected override void OnGameStatusChanged(GameStatus newStatus)
+    {
+        //TODO
     }
 
     private void Update()

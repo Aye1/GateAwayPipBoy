@@ -35,7 +35,7 @@ public class BarBalanceGameData : GameData
 
     public override void InitGame()
     {
-        status = GameStatus.Started;
+        SetStatus(GameStatus.Started);
     }
 
     public void SetCurrentValue(float newValue)

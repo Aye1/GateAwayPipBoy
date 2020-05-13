@@ -6,38 +6,32 @@ public class SymbolGameView : GameView
 #pragma warning disable 0649
     [SerializeField] private TextMeshProUGUI _answerText;
     [SerializeField] private TextMeshProUGUI _currentText;
-    [SerializeField] private Transform _controlsHolder;
+    [SerializeField] private TextMeshProUGUI _victoryText;
     [SerializeField] private Color baseColor;
     [SerializeField] private Color winColor;
     [SerializeField] private Color failColor;
 #pragma warning restore 0649
 
-    private SymbolGameData GameData
+    private SymbolGameData SpecificGameData
     {
-        get { return (SymbolGameData)gameData; }
+        get { return (SymbolGameData)base.GameData; }
     }
 
     private void Update()
     {
         UpdateTexts();
-        UpdateColor();
-    }
-
-    public Transform GetSymbolsControlHolder()
-    {
-        return _controlsHolder;
     }
 
     private void UpdateTexts()
     {
-        _answerText.text = GameData.clientPartialResult;
+        _answerText.text = SpecificGameData.clientPartialResult;
         _currentText.text = GetCurrentTextWithUnderscores();
     }
 
     private string GetCurrentTextWithUnderscores()
     {
-        string text = GameData.currentText;
-        int neededUnderscores = GameData.result.Length - text.Length;
+        string text = SpecificGameData.currentText;
+        int neededUnderscores = SpecificGameData.result.Length - text.Length;
         for(int i = 0; i < neededUnderscores; i++)
         {
             text += "_";
@@ -45,18 +39,21 @@ public class SymbolGameView : GameView
         return text;
     }
 
-    private void UpdateColor()
+    protected override void OnGameStatusChanged(GameStatus newStatus)
     {
-        Color currentColor = Color.black;
-        switch(gameData.status)
+        switch(newStatus)
         {
-            case GameStatus.Failed:
-                currentColor = failColor;
-                break;
             case GameStatus.Won:
-                currentColor = winColor;
+                _answerText.gameObject.SetActive(false);
+                _currentText.gameObject.SetActive(false);
+                _victoryText.gameObject.SetActive(true);
+                break;
+            case GameStatus.Failed:
+                _currentText.color = failColor;
+                break;
+            case GameStatus.Started:
+                _currentText.color = Color.black;
                 break;
         }
-        _currentText.color = currentColor;
     }
 }

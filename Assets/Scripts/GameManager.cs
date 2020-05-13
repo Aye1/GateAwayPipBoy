@@ -130,4 +130,12 @@ public class GameManager : MonoBehaviour
     {
         NetworkServer.Spawn(data.gameObject, player.gameObject);
     }
+
+    public void ClearAllGameData()
+    {
+        foreach (Transform t in transform)
+        {
+            Destroy(t.gameObject);
+        }
+    }
 }
