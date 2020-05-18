@@ -5,17 +5,28 @@ using UnityEngine;
 
 public class BarBalanceGameData : GameData
 {
-    public float currentValue;
-    public float decreaseSpeed = 10;
+    public int nbBars = 4;
+    public float[] currentValues = { 70f, 80f, 70f, 70f };
+    public int[] currentGoalMins = { 30, 40, 50, 60 };
+    public int[] currentGoalMaxs= { 50, 60, 70, 80 };
+    public float[] decreaseSpeeds = { 5f, 5f, 5f, 5f };
+    public float[] increaseSpeeds = { 15f, 10f, 20f, 10f };
 
     private int maxValue = 100;
 
     public override void CreateControls()
     {
-        var barControls = GameManager.Instance.CreateControlData(GameType.BarBalanceGame) as BarBalanceControlData;
+        var barControls = new List<BarBalanceControlData>();
+        for (int i = 0; i < nbBars; ++i)
+        {
+            var controlData = GameManager.Instance.CreateControlData(GameType.BarBalanceGame) as BarBalanceControlData;
+            controlData.controlIdx = i;
+            controlData.SetMainGameIdentity(netIdentity);
+            barControls.Add(controlData);
+        }
 
-        barControls.SetMainGameIdentity(netIdentity);
-        GameManager.Instance.SendControlBroadcast(barControls, playerIdentities);
+      
+        GameManager.Instance.SendControlsBroadcast(barControls, playerIdentities);
     }
 
     public override DisplayType GetDisplayType()
@@ -38,18 +49,19 @@ public class BarBalanceGameData : GameData
         SetStatus(GameStatus.Started);
     }
 
-    public void SetCurrentValue(float newValue)
+    public void SetCurrentValue(int barIdx, float newValue)
     {
-        currentValue = Math.Min(100, Math.Max(0, newValue));
+        currentValues[barIdx] = Math.Min(100, Math.Max(0, newValue));
     }
 
-    public void Increment(float addedValue)
+    public void Increment(int barIdx, float addedValue)
     {
-        currentValue = Math.Min(100, currentValue + addedValue);
+        currentValues[barIdx] = Math.Min(100, currentValues[barIdx] + addedValue);
     }
 
     public void Update()
     {
-        currentValue = Math.Max(0, currentValue - Time.deltaTime * decreaseSpeed);
+        for (int i=0; i<nbBars; ++i)
+            currentValues[i] = Math.Max(0, currentValues[i] - Time.deltaTime * decreaseSpeeds[i]);
     }
 }

@@ -76,21 +76,16 @@ public class GameManager : MonoBehaviour
         return data;
     }
 
-    public void SendControlBroadcast(GameControlData control, IEnumerable<Player> players)
-    {
-        SendControlsBroadcast(new List<GameControlData>() { control }, players);
-    }
-
     public void SendControlBroadcast(GameControlData control, IEnumerable<NetworkIdentity> playerIdentities)
     {
-        SendControlBroadcast(control, playerIdentities.Select(x => x.GetComponent<Player>()));
+        SendControlsBroadcast(new List<GameControlData>() { control }, playerIdentities);
     }
     
-    public void SendControlsBroadcast(IEnumerable<GameControlData> controls, IEnumerable<Player> players)
+    public void SendControlsBroadcast(IEnumerable<GameControlData> controls, IEnumerable<NetworkIdentity> playerIdentities)
     {
         foreach(GameControlData control in controls)
         {
-          foreach(Player player in players)
+          foreach(NetworkIdentity player in playerIdentities)
             {
                 NetworkServer.Spawn(control.gameObject, player.gameObject);
             }
