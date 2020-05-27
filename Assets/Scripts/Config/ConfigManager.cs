@@ -2,28 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum DeviceType { Unknown, Server, Tablet, Phone };
 public class ConfigManager : MonoBehaviour
 {
-    // Version string is in format M.m.r
-    // M: major version, changes if the whole system changes
-    // m: minor version, changes every time the version compatibility is broken (e.g. field removed)
-    // r: revision version, changes with every config change, if it does not break the compatibility (e.g. field added)
-    public const string currentConfigVersion = "0.0.1";
-
     private const string configVersionKey = "CONFIG_VERSION";
     private const string deviceTypeKey = "DEVICE_TYPE";
 
     public static ConfigManager Instance { get; private set; }
 
     public bool isConfLoaded;
+    public Config currentConfig;
 
     [Header("UI bindings")]
     [SerializeField] private ConfigView _configView;
     [SerializeField] private Canvas _canvas;
-
-    [Header("Configuration values")]
-    public DeviceType deviceType = DeviceType.Unknown;
 
     void Awake()
     {
@@ -40,7 +31,8 @@ public class ConfigManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if(LocalConfigExists())
+        currentConfig = new Config();
+        if (LocalConfigExists())
         {
             Debug.Log("Local config found");
             LoadLocalConfig();
@@ -58,33 +50,46 @@ public class ConfigManager : MonoBehaviour
     private void LoadLocalConfig()
     {
         string configToLoadVersion = PlayerPrefs.GetString(configVersionKey);
-        if (!VersionUtils.AreVersionsCompatible(currentConfigVersion, configToLoadVersion))
+        currentConfig.deviceType = (DeviceType)PlayerPrefs.GetInt(deviceTypeKey);
+
+        if (!VersionUtils.AreVersionsCompatible(currentConfig.version, configToLoadVersion))
         {
             Debug.LogWarning("Config found incompatible with current version");
             LaunchConfigSetup();
         } else
         {
-            deviceType = (DeviceType)PlayerPrefs.GetInt(deviceTypeKey);
-            if(!VersionUtils.Equals(currentConfigVersion, configToLoadVersion))
+            if(!VersionUtils.Equals(currentConfig.version, configToLoadVersion))
             {
                 // Save config with new version, some fields may be saved with default values
                 SaveConfig();
                 Debug.LogWarning("Resaving config with latest version, check that everything is OK");
+                isConfLoaded = true;
             }
-            isConfLoaded = true;
         }
+    }
+
+    public void SetConfig(Config config)
+    {
+        currentConfig = config;
     }
 
     public void SaveConfig()
     {
-        PlayerPrefs.SetInt(deviceTypeKey, (int) deviceType);
-        PlayerPrefs.SetString(configVersionKey, currentConfigVersion);
+        PlayerPrefs.SetInt(deviceTypeKey, (int) currentConfig.deviceType);
+        PlayerPrefs.SetString(configVersionKey, currentConfig.version);
     }
 
     private void LaunchConfigSetup()
     {
         ConfigView view = Instantiate(_configView, Vector3.zero, Quaternion.identity, _canvas.transform);
-        view.SetDeviceType(deviceType);
+        view.SetConfig(currentConfig);
         view.transform.localPosition = Vector3.zero;
+    }
+
+    public bool IsConfigValid(Config config)
+    {
+        bool isValid = VersionUtils.HasCorrectFormat(config.version);
+        isValid &= config.deviceType != DeviceType.Unknown;
+        return isValid;
     }
 }

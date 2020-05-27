@@ -22,7 +22,7 @@ public class PlayerInfoPanel : MonoBehaviour
 
     private void Update()
     {
-        _playerTypeText.text = player.playerType.ToString();
+        _playerTypeText.text = player.deviceType.ToString();
         if (player.teamIdentity != null)
         {
             _teamNameText.text = player.teamIdentity.GetComponent<Team>().teamName;

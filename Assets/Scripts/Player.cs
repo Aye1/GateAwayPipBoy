@@ -1,7 +1,7 @@
 ﻿using Mirror;
 using System;
 
-public enum PlayerType { Unknown, Tablet, Phone };
+public enum DeviceType { Unknown, Server, Tablet, Phone };
 
 [Serializable]
 public class Player : NetworkBehaviour
@@ -12,7 +12,7 @@ public class Player : NetworkBehaviour
     public string playerName = "N/A";
 
     [SyncVar]
-    public PlayerType playerType;
+    public DeviceType deviceType;
 
     [SyncVar]
     public NetworkIdentity teamIdentity;
@@ -24,9 +24,9 @@ public class Player : NetworkBehaviour
     }
 
     [Command]
-    public void CmdSetPlayerType(PlayerType type)
+    public void CmdSetDeviceType(DeviceType type)
     {
-        playerType = type;
+        deviceType = type;
     }
 
     [Command]
@@ -39,7 +39,7 @@ public class Player : NetworkBehaviour
     {
         if(netIdentity.hasAuthority)
         {
-            CmdSetPlayerType(CustomNetworkManager.Instance.playerType);
+            CmdSetDeviceType(CustomNetworkManager.Instance.deviceType);
             // We init every player on first team 
             NetworkIdentity defaultTeamIdentity = TeamManager.Instance.GetTeam(0).netIdentity;
             CmdSetTeamIdentity(defaultTeamIdentity);

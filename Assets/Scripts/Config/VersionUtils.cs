@@ -1,8 +1,11 @@
 ﻿
 using System;
+using System.Text.RegularExpressions;
 
 public static class VersionUtils
 {
+    private const string versionPattern = @"^\d\.\d\.\d$"; 
+
     public static int GetMajorVersion(string versionString)
     {
         string[] tmp = SplitVersions(versionString);
@@ -53,5 +56,11 @@ public static class VersionUtils
     {
         return GetMajorVersion(versionString1) == GetMajorVersion(versionString2)
             && GetMinorVersion(versionString1) == GetMinorVersion(versionString2);
+    }
+
+    public static bool HasCorrectFormat(string version)
+    {
+        Regex rx = new Regex(versionPattern, RegexOptions.Compiled);
+        return rx.IsMatch(version);
     }
 }

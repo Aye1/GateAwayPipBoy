@@ -27,7 +27,7 @@ public class DeviceView : MonoBehaviour
         if (player != null && player.Connection != null)
         {
             _connectionIdText.text = "Connection " + player.Connection.connectionId;
-            _typeText.text = player.playerType.ToString();
+            _typeText.text = player.deviceType.ToString();
             _addressText.text = player.Connection.address;
             _debugInfo.text = player.playerName;
             if (player.teamIdentity != null)

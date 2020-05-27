@@ -53,7 +53,7 @@ public abstract class GameData : NetworkBehaviour
     {
         transform.SetParent(GameManager.Instance.transform);
         Player associatedPlayer = MirrorHelpers.GetClientLocalPlayer(netIdentity);
-        if(TypesHelpers.HasMatchingType(GetDisplayType(), associatedPlayer.playerType) && IsLocalPlayerInGame())
+        if(TypesHelpers.HasMatchingType(GetDisplayType(), associatedPlayer.deviceType) && IsLocalPlayerInGame())
         {
             GamesViewsManager.Instance.CreateGameView(this);
         }

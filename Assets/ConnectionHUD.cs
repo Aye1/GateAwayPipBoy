@@ -41,7 +41,7 @@ public class ConnectionHUD : MonoBehaviour
         CustomNetworkManager.Instance.StartHost();
     }
 
-    public void StartClient(PlayerType type)
+    public void StartClient(DeviceType type)
     {
         CustomNetworkManager.Instance.StartClient(type);
         CustomNetworkManager.Instance.networkAddress = _serverAddress.text;
@@ -49,12 +49,12 @@ public class ConnectionHUD : MonoBehaviour
 
     public void StartTabletClient()
     {
-        StartClient(PlayerType.Tablet);
+        StartClient(DeviceType.Tablet);
     }
 
     public void StartPhoneClient()
     {
-        StartClient(PlayerType.Phone);
+        StartClient(DeviceType.Phone);
     }
 
     public void Disconnect()

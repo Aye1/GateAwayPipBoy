@@ -30,7 +30,7 @@ public class CustomNetworkManager : NetworkManager
 
     public List<Player> ConnectedPlayers { get; private set; }
 
-    public PlayerType playerType;
+    public DeviceType deviceType;
  
     public override void Awake()
     {
@@ -47,10 +47,10 @@ public class CustomNetworkManager : NetworkManager
         }
     }
 
-    public void StartClient(PlayerType type)
+    public void StartClient(DeviceType type)
     {
         StartClient();
-        playerType = type;
+        deviceType = type;
     }
 
     public override void OnStartServer()

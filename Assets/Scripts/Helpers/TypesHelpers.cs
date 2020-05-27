@@ -1,19 +1,19 @@
 ﻿
 public static class TypesHelpers
 {
-    public static bool HasMatchingType(DisplayType displayType, PlayerType playerType)
+    public static bool HasMatchingType(DisplayType displayType, DeviceType deviceType)
     {
         bool res = false;
         switch (displayType)
         {
             case DisplayType.PhoneOnly:
-                res = playerType == PlayerType.Phone;
+                res = deviceType == DeviceType.Phone;
                 break;
             case DisplayType.TabletOnly:
-                res = playerType == PlayerType.Tablet;
+                res = deviceType == DeviceType.Tablet;
                 break;
             case DisplayType.TabletAndPhone:
-                res = playerType == PlayerType.Phone || playerType == PlayerType.Tablet;
+                res = deviceType == DeviceType.Phone || deviceType == DeviceType.Tablet;
                 break;
             case DisplayType.Unknown:
                 res = false;
